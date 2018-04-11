@@ -10,7 +10,7 @@ const isUnixHiddenPath = path => (/(^|\/)\.[^\/\.]/g).test(path);
 const giveup = rgx => !rgx || rgx == '/^((?:[^\\/]*(?:\\/|$))*)$/';
 const relativeDir = (parent, child) => relative(parse(parent).name, child);
 
-const statCache = {}
+const CACHE = {};
 
 /**
  * Find files using bash-like globbing.
@@ -41,9 +41,8 @@ async function glob(str, opts={}) {
       const path = join(dir, file);
       const basepath = join(base, file);
 
-      let stats;
-      if (statCache[path]) stats = statCache[path]
-      else statCache[path] = stats = fs.lstatSync(path);
+      let stats = CACHE[path];
+      (stats === void 0) && (CACHE[path] = stats = fs.lstatSync(path));
 
       if (!stats.isDirectory()) {
         if (regex.test(basepath)) {
