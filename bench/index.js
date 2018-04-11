@@ -1,5 +1,6 @@
 const Table = require('cli-table2');
 const { Suite } = require('benchmark');
+const assert = require('./assert');
 const { sync } = require('glob');
 const fg = require('fast-glob');
 const curr = require('../src');
@@ -8,7 +9,11 @@ const cwd = __dirname;
 const pattern = 'test/*.js';
 const head = ['Name', 'Mean time', 'Ops/sec', 'Diff'];
 
-new Suite({ onComplete })
+async function onStart() {
+  await assert(pattern, { cwd });
+}
+
+new Suite({ onStart, onComplete })
   .add('glob', () => sync(pattern, { cwd }))
   .add('fast-glob', () => fg(pattern, { cwd }))
   .add('tiny-glob', () => curr(pattern, { cwd }))
