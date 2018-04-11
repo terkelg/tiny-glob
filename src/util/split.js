@@ -1,5 +1,3 @@
-'use strict';
-
 const isglob = require('./isglob');
 const { dirname }  = require('path');
 
@@ -23,13 +21,13 @@ function path(str) {
  * @returns {String} glob part of path
  */
 function glob(str) {
-    const p = path(str);
-    if (p === '') return str;
-    if (p === '.') {
-        if (str[1] === '/') return str.substring(2);
-        return str.substring(0);
-    }
-    return str.substring(p.length+1); // skip '/'
+  const p = path(str);
+  if (p === '') return str;
+  if (p === '.') {
+    if (str[1] === '/') return str.substring(2);
+    return str.substring(0);
+  }
+  return str.substring(p.length+1); // skip '/'
 }
 
 module.exports = { path, glob }
