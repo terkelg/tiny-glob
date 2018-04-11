@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "bench": "node bench",
     "test": "tape test/*.js | tap-spec"
   },
   "author": "",
