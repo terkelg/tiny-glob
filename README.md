@@ -1,6 +1,6 @@
-# @robin/glob
+# tiny-glob
 
-> Fast micro glob-ish library to match files
+> Fast and super tiny glob library
 
 Match files and folders using glob patterns, similar to how shell uses globbing.
 All path are normalized compared to `node-glob`.
@@ -8,14 +8,14 @@ All path are normalized compared to `node-glob`.
 ## Installation
 
 ```
-npm install @robin/glob
+npm install tiny-glob
 ```
 
 
 ## Usage
 
 ```js
-const { glob } = require('@robin/glob');
+const { glob } = require('tiny-glob');
 
 (async function(){
     let files = await glob('src/*/*.{js,md}');
@@ -27,7 +27,7 @@ const { glob } = require('@robin/glob');
 ## API
 
 
-### glob
+### tiny-glob
 
 Type: `function`<br>
 Returns: `Array`
@@ -61,56 +61,6 @@ Type: `Boolean`<br>
 Default: `false`
 
 Exclude hidden files
-
-#### options.markdir
-
-Type: `Boolean`<br>
-Default: `false`
-
-Mark directories by appending `path.sep`
-
-
-### globSync
-
-Type: `function`<br>
-Returns: `Array`
-
-Return array of matching files and folders
-
-#### str
-
-Type: `String`
-
-Glob string to seach for
-
-#### options
-
-Type: `Object`<br>
-Default: `{ cwd: '.', hidden: false }`
-
-Optional options object
-
-#### options.cwd
-
-Type: `String`<br>
-Default: `'.'`
-
-Change default working directory
-
-#### options.hidden
-
-Type: `Boolean`<br>
-Default: `false`
-
-Exclude hidden files
-
-#### options.markdir
-
-Type: `Boolean`<br>
-Default: `false`
-
-Mark directories by appending `path.sep`
-
 
 ## License
 
