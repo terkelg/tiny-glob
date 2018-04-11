@@ -24,6 +24,7 @@ test('glob: glob', async t => {
   t.deepEqual(order(await glob('test/fixtures/../*')), [
     'test/fixtures',
     'test/glob.js',
+    'test/helpers',
     'test/util.js',
   ]);
 
