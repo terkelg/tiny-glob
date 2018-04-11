@@ -2,139 +2,141 @@ const test = require('tape');
 const { join } = require('path');
 const $ = require('../src/util');
 
-test('util.split - path', t => {
-  t.plan(82);
-
+test('util', t => {
   t.equal(typeof $.toPath, 'function', 'constructor is a typeof function');
-
-  // should strip glob magic to return parent path
-  t.equal($.toPath('.'), '.');
-  t.equal($.toPath('.*'), '.');
-  t.equal($.toPath('/.*'), '/');
-  t.equal($.toPath('/.*/'), '/');
-  t.equal($.toPath('a/.*/b'), 'a');
-  t.equal($.toPath('a*/.*/b'), '.');
-  t.equal($.toPath('*/a/b/c'), '.');
-  t.equal($.toPath('*'), '.');
-  t.equal($.toPath('*/'), '.');
-  t.equal($.toPath('*/*'), '.');
-  t.equal($.toPath('*/*/'), '.');
-  t.equal($.toPath('**'), '.');
-  t.equal($.toPath('**/'), '.');
-  t.equal($.toPath('**/*'), '.');
-  t.equal($.toPath('**/*/'), '.');
-  t.equal($.toPath('/*.js'), '/');
-  t.equal($.toPath('*.js'), '.');
-  t.equal($.toPath('**/*.js'), '.');
-  t.equal($.toPath('{a,b}'), '.');
-  t.equal($.toPath('/{a,b}'), '/');
-  t.equal($.toPath('/{a,b}/'), '/');
-  t.equal($.toPath('(a|b)'), '.');
-  t.equal($.toPath('/(a|b)'), '/');
-  t.equal($.toPath('./(a|b)'), '.');
-  t.equal($.toPath('a/(b c)'), 'a', 'not an extglob');
-  t.equal($.toPath('a/(b c)/d'), 'a/(b c)', 'not an extglob');
-  t.equal($.toPath('path/to/*.js'), 'path/to');
-  t.equal($.toPath('/root/path/to/*.js'), '/root/path/to');
-  t.equal($.toPath('chapter/foo [bar]/'), 'chapter');
-  t.equal($.toPath('path/[a-z]'), 'path');
-  t.equal($.toPath('path/{to,from}'), 'path');
-  t.equal($.toPath('path/(to|from)'), 'path');
-  t.equal($.toPath('path/(foo bar)/subdir/foo.*'), 'path/(foo bar)/subdir');
-  t.equal($.toPath('path/!(to|from)'), 'path');
-  t.equal($.toPath('path/?(to|from)'), 'path');
-  t.equal($.toPath('path/+(to|from)'), 'path');
-  t.equal($.toPath('path/*(to|from)'), 'path');
-  t.equal($.toPath('path/@(to|from)'), 'path');
-  t.equal($.toPath('path/!/foo'), 'path/!');
-  t.equal($.toPath('path/?/foo'), 'path/?');
-  t.equal($.toPath('path/+/foo'), 'path/+');
-  t.equal($.toPath('path/*/foo'), 'path');
-  t.equal($.toPath('path/@/foo'), 'path/@');
-  t.equal($.toPath('path/!/foo/'), 'path/!/foo');
-  t.equal($.toPath('path/?/foo/'), 'path/?/foo');
-  t.equal($.toPath('path/+/foo/'), 'path/+/foo');
-  t.equal($.toPath('path/*/foo/'), 'path');
-  t.equal($.toPath('path/@/foo/'), 'path/@/foo');
-  t.equal($.toPath('path/**/*'), 'path');
-  t.equal($.toPath('path/**/subdir/foo.*'), 'path');
-  t.equal($.toPath('path/subdir/**/foo.js'), 'path/subdir');
-  t.equal($.toPath('path/!subdir/foo.js'), 'path/!subdir');
-
-  // should respect escaped characters
-  t.equal($.toPath('path/\\*\\*/subdir/foo.*'), 'path/**/subdir');
-  t.equal($.toPath('path/\\[\\*\\]/subdir/foo.*'), 'path/[*]/subdir');
-  t.equal($.toPath('path/\\*(a|b)/subdir/foo.*'), 'path');
-  t.equal($.toPath('path/\\*/(a|b)/subdir/foo.*'), 'path/*');
-  t.equal($.toPath('path/\\*\\(a\\|b\\)/subdir/foo.*'), 'path/*(a|b)/subdir');
-  t.equal($.toPath('path/\\[foo bar\\]/subdir/foo.*'), 'path/[foo bar]/subdir');
-  t.equal($.toPath('path/\\[bar]/'), 'path/[bar]');
-  t.equal($.toPath('path/foo \\[bar]/'), 'path/foo [bar]');
-
-  // should return parent dirname from non-glob paths
-  t.equal($.toPath('path'), '.');
-  t.equal($.toPath('path/foo'), 'path');
-  t.equal($.toPath('path/foo/'), 'path/foo');
-  t.equal($.toPath('path/foo/bar.js'), 'path/foo');
-  t.equal($.toPath('path'), '.');
-  t.equal($.toPath('path/foo'), 'path');
-  t.equal($.toPath('path/foo/'), 'path/foo');
-  t.equal($.toPath('path/foo/bar.js'), 'path/foo');
-
-  // glob2base test patterns
-  t.equal($.toPath('js/*.js'), 'js');
-  t.equal($.toPath('js/**/test/*.js'), 'js');
-  t.equal($.toPath('js/test/wow.js'), 'js/test');
-  t.equal($.toPath('js/test/wow.js'), 'js/test');
-  t.equal($.toPath('js/t[a-z]st}/*.js'), 'js');
-  t.equal($.toPath('js/{src,test}/*.js'), 'js')
-  t.equal($.toPath('js/test{0..9}/*.js'), 'js')
-  t.equal($.toPath('js/t+(wo|est)/*.js'), 'js');
-  t.equal($.toPath('js/t(wo|est)/*.js'), 'js');
-  t.equal($.toPath('js/t/(wo|est)/*.js'), 'js/t');
-
-  // should get a base name from a complex brace glob
-  t.equal($.toPath('lib/{components,pages}/**/{test,another}/*.txt'), 'lib');
-  t.equal($.toPath('js/test/**/{images,components}/*.js'), 'js/test');
-  t.equal($.toPath('ooga/{booga,sooga}/**/dooga/{eooga,fooga}'), 'ooga');
+  t.equal(typeof $.toGlob, 'function', 'constructor is a typeof function');
+  t.equal(typeof $.isGlob, 'function', 'constructor is a typeof function');
+  t.end();
 });
 
-test('util.split - glob', t => {
-  t.plan(9);
+test('util.toPath', t => {
+  let fn = $.toPath;
 
-  t.equal(typeof $.toGlob, 'function', 'constructor is a typeof function');
+  [
+    // should strip glob magic to return parent path
+    ['.', '.'],
+    ['.*', '.'],
+    ['/.*', '/'],
+    ['/.*/', '/'],
+    ['a/.*/b', 'a'],
+    ['a*/.*/b', '.'],
+    ['*/a/b/c', '.'],
+    ['*', '.'],
+    ['*/', '.'],
+    ['*/*', '.'],
+    ['*/*/', '.'],
+    ['**', '.'],
+    ['**/', '.'],
+    ['**/*', '.'],
+    ['**/*/', '.'],
+    ['/*.js', '/'],
+    ['*.js', '.'],
+    ['**/*.js', '.'],
+    ['{a,b}', '.'],
+    ['/{a,b}', '/'],
+    ['/{a,b}/', '/'],
+    ['(a|b)', '.'],
+    ['/(a|b)', '/'],
+    ['./(a|b)', '.'],
+    ['a/(b c)', 'a', 'not an extglob'],
+    ['a/(b c)/d', 'a/(b c)', 'not an extglob'],
+    ['path/to/*.js', 'path/to'],
+    ['/root/path/to/*.js', '/root/path/to'],
+    ['chapter/foo [bar]/', 'chapter'],
+    ['path/[a-z]', 'path'],
+    ['path/{to,from}', 'path'],
+    ['path/(to|from)', 'path'],
+    ['path/(foo bar)/subdir/foo.*', 'path/(foo bar)/subdir'],
+    ['path/!(to|from)', 'path'],
+    ['path/?(to|from)', 'path'],
+    ['path/+(to|from)', 'path'],
+    ['path/*(to|from)', 'path'],
+    ['path/@(to|from)', 'path'],
+    ['path/!/foo', 'path/!'],
+    ['path/?/foo', 'path/?'],
+    ['path/+/foo', 'path/+'],
+    ['path/*/foo', 'path'],
+    ['path/@/foo', 'path/@'],
+    ['path/!/foo/', 'path/!/foo'],
+    ['path/?/foo/', 'path/?/foo'],
+    ['path/+/foo/', 'path/+/foo'],
+    ['path/*/foo/', 'path'],
+    ['path/@/foo/', 'path/@/foo'],
+    ['path/**/*', 'path'],
+    ['path/**/subdir/foo.*', 'path'],
+    ['path/subdir/**/foo.js', 'path/subdir'],
+    ['path/!subdir/foo.js', 'path/!subdir'],
+    // should respect escaped characters
+    ['path/\\*\\*/subdir/foo.*', 'path/**/subdir'],
+    ['path/\\[\\*\\]/subdir/foo.*', 'path/[*]/subdir'],
+    ['path/\\*(a|b)/subdir/foo.*', 'path'],
+    ['path/\\*/(a|b)/subdir/foo.*', 'path/*'],
+    ['path/\\*\\(a\\|b\\)/subdir/foo.*', 'path/*(a|b)/subdir'],
+    ['path/\\[foo bar\\]/subdir/foo.*', 'path/[foo bar]/subdir'],
+    ['path/\\[bar]/', 'path/[bar]'],
+    ['path/foo \\[bar]/', 'path/foo [bar]'],
+    // should return parent dirname from non-glob paths
+    ['path', '.'],,
+    ['path/foo', 'path'],
+    ['path/foo/', 'path/foo'],
+    ['path/foo/bar.js', 'path/foo'],
+    ['path', '.'],
+    ['path/foo', 'path'],
+    ['path/foo/', 'path/foo'],
+    ['path/foo/bar.js', 'path/foo'],
+    // glob2base test patterns
+    ['js/*.js', 'js'],
+    ['js/**/test/*.js', 'js'],
+    ['js/test/wow.js', 'js/test'],
+    ['js/test/wow.js', 'js/test'],
+    ['js/t[a-z]st}/*.js', 'js'],
+    ['js/{src,test}/*.js', 'js'],
+    ['js/test{0..9}/*.js', 'js'],
+    ['js/t+(wo|est)/*.js', 'js'],
+    ['js/t(wo|est)/*.js', 'js'],
+    ['js/t/(wo|est)/*.js', 'js/t'],
+    // should get a base name from a complex brace glob
+    ['lib/{components,pages}/**/{test,another}/*.txt', 'lib'],
+    ['js/test/**/{images,components}/*.js', 'js/test'],
+    ['ooga/{booga,sooga}/**/dooga/{eooga,fooga}', 'ooga']
+  ].forEach(([x, y]) => {
+    t.is(fn(x), y);
+  });
 
-  t.equal($.toGlob(''), '');
-  t.equal($.toGlob('*'), '*');
-  t.equal($.toGlob('.*'), '.*');
-  t.equal($.toGlob('/.*'), '*');
-  t.equal($.toGlob('path/**/*'), '**/*');
-  t.equal($.toGlob('/path/**/*'), '**/*');
-  t.equal($.toGlob('root/(foo|bar)/path/**/*'), '(foo|bar)/path/**/*');
-  t.equal($.toGlob('@(test)/root/(foo|bar)/path/**/*'), '@(test)/root/(foo|bar)/path/**/*');
+  t.end();
+});
+
+test('util.toGlob', t => {
+  let fn = $.toGlob;
+
+  [
+    ['', ''],
+    ['*', '*'],
+    ['.*', '.*'],
+    ['/.*', '*'],
+    ['path/**/*', '**/*'],
+    ['/path/**/*', '**/*'],
+    ['root/(foo|bar)/path/**/*', '(foo|bar)/path/**/*'],
+    ['@(test)/root/(foo|bar)/path/**/*', '@(test)/root/(foo|bar)/path/**/*'],
+  ].forEach(([x, y]) => {
+    t.is(fn(x), y);
+  });
+
+  t.end();
 })
 
-test('util.$.isGlob', t => {
-  t.equal(typeof $.isGlob, 'function', 'constructor is a typeof function');
+test('util.isGlob', t => {
+  let fn = $.isGlob;
 
   // should be true if it is a glob pattern
-  t.equal($.isGlob('*.js'), true);
-  t.equal($.isGlob('!*.js'), true);
-  t.equal($.isGlob('!foo'), true);
-  t.equal($.isGlob('!foo.js'), true);
-  t.equal($.isGlob('**/abc.js'), true);
-  t.equal($.isGlob('abc/*.js'), true);
-  t.equal($.isGlob('@.(?:abc)'), true);
-  t.equal($.isGlob('@.(?!abc)'), true);
+  ['*.js', '!*.js', '!foo', '!foo.js', '**/abc.js', 'abc/*.js', '@.(?:abc)', '@.(?!abc)'].forEach(x => {
+    t.true(fn(x));
+  });
 
   // should not match escaped globs
-  t.equal(!$.isGlob('\\!\\*.js'), true);
-  t.equal(!$.isGlob('\\!foo'), true);
-  t.equal(!$.isGlob('\\!foo.js'), true);
-  t.equal(!$.isGlob('\\*(foo).js'), true);
-  t.equal(!$.isGlob('\\*.js'), true);
-  t.equal(!$.isGlob('\\*\\*/abc.js'), true);
-  t.equal(!$.isGlob('abc/\\*.js'), true);
+  ['\\!\\*.js', '\\!foo', '\\!foo.js', '\\*(foo).js', '\\*.js', '\\*\\*/abc.js', 'abc/\\*.js'].forEach(x => {
+    t.false(fn(x));
+  });
 
   t.end();
 });
