@@ -22,8 +22,7 @@ const CACHE = {};
  */
 async function glob(str, opts={}) {
   if (!isGlob(str)) {
-    try { return fs.lstatSync(str) && [str]; }
-    catch(e) { return [] }
+    return fs.existsSync(str) ? [str] : [];
   }
 
   const matches = [];
