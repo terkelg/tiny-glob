@@ -15,7 +15,7 @@ npm install tiny-glob
 ## Usage
 
 ```js
-const { glob } = require('tiny-glob');
+const glob = require('tiny-glob');
 
 (async function(){
     let files = await glob('src/*/*.{js,md}');
