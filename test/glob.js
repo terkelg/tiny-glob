@@ -72,7 +72,7 @@ test('glob: glob', async t => {
     ]);
 });
 
-test('glob: option cwd', async t => {
+test('glob: options.cwd', async t => {
     t.plan(2);
 
     t.deepEqual(order(await glob('../*', { cwd: join(cwd, 'one', 'child') })), [
@@ -91,16 +91,16 @@ test('glob: option cwd', async t => {
     ]);
 });
 
-test('glob: option hidden', async t => {
+test('glob: options.dot', async t => {
     t.plan(2);
 
-    t.deepEqual(order(await glob('test/fixtures/*.txt', { hidden: true })), [
+    t.deepEqual(order(await glob('test/fixtures/*.txt', { dot: true })), [
         'test/fixtures/.a-hidden.txt',
         'test/fixtures/a.txt',
         'test/fixtures/b.txt'
     ]);
 
-    t.deepEqual(order(await glob('test/fixtures/*.txt', { hidden: false })), [
+    t.deepEqual(order(await glob('test/fixtures/*.txt', { dot: false })), [
         'test/fixtures/a.txt',
         'test/fixtures/b.txt'
     ]);

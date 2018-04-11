@@ -16,22 +16,21 @@ const statCache = {}
  * Find files using bash-like globbing.
  * All paths are normalized compared to node-glob.
  * @param {String} str Glob string
- * @param {Object} [options] Options object
  * @param {String} [options.cwd='.'] Current working directory
- * @param {Boolean} [options.hidden=false] Include hidden files
+ * @param {Boolean} [options.dot=false] Include dotfile matches
  * @returns {Array} array containing matching files
  */
-async function glob(str, { cwd = '.', hidden = false } = {}) {
+async function glob(str, opts={}) {
   if (!isGlob(str)) {
     try { return fs.lstatSync(str) && [str]; }
     catch(e) { return [] }
   }
 
   const matches = [];
+  const cwd = opts.cwd || '.';
   const prefix = join(cwd, split.path(str));
   const glob = split.glob(str);
   const { segments, regex } = globrex(glob, { globstar: true, extended: true });
-
 
   async function walk(base = '', level = 0) {
     const dir = join(prefix, base || sep);
@@ -48,15 +47,14 @@ async function glob(str, { cwd = '.', hidden = false } = {}) {
 
       if (!stats.isDirectory()) {
         if (regex.test(basepath)) {
-          if (!hidden && isUnixHiddenPath(basepath)) return
-          matches.push(relative(cwd, path))
+          if (!opts.dot && isUnixHiddenPath(basepath)) return;
+          matches.push(relative(cwd, path));
         }
         return;
       }
 
       const rgx = segments[level];
-      if (rgx && !rgx.test(file))
-        return;
+      if (rgx && !rgx.test(file)) return;
 
       if (regex.test(basepath)) {
         let dir = cwd === path ? relativeDir(prefix, file) : path;
