@@ -2,15 +2,10 @@
 
 const test = require('tape');
 const { join } = require('path');
+const { order, unixify } = require('./helpers');
 const glob = require('../src');
-const cwd = join('test', 'fixtures');
 
-// unixify path for cross-platform testing
-const unixifyPath = filepath => process.platform === 'win32' ? filepath.replace(/\\/g, '/') : filepath;
-const order = arr => arr
-    .filter(file => !file.includes('.DS_Store'))
-    .map(unixifyPath)
-    .sort();
+const cwd = join('test', 'fixtures');
 
 test('glob: standard', async t => {
     t.plan(2);
@@ -21,9 +16,9 @@ test('glob: standard', async t => {
 test('glob: glob', async t => {
     t.plan(13);
 
-    t.deepEqual(unixifyPath(await glob('')), []);
-    t.deepEqual(unixifyPath(await glob('.')), ['.']);
-    t.deepEqual(unixifyPath(await glob('./')), ['./']);
+    t.deepEqual(unixify(await glob('')), []);
+    t.deepEqual(unixify(await glob('.')), ['.']);
+    t.deepEqual(unixify(await glob('./')), ['./']);
 
     t.deepEqual(order(await glob('test/fixtures')), ['test/fixtures']);
 
