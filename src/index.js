@@ -1,9 +1,8 @@
 const fs = require('fs');
 const globrex = require('globrex');
 const { promisify } = require('util');
-const split = require('./util/split');
-const isGlob = require('./util/isglob');
 const { join, sep, relative, parse } = require('path');
+const { isGlob, toGlob, toPath } = require('./util');
 
 const readdir = promisify(fs.readdir);
 const isUnixHiddenPath = path => (/(^|\/)\.[^\/\.]/g).test(path);
@@ -27,8 +26,8 @@ module.exports = async function (str, opts={}) {
 
   const matches = [];
   const cwd = opts.cwd || '.';
-  const prefix = join(cwd, split.path(str));
-  const glob = split.glob(str);
+  const prefix = join(cwd, toPath(str));
+  const glob = toGlob(str);
   const { segments, regex } = globrex(glob, { globstar: true, extended: true });
 
   async function walk(base = '', level = 0) {
