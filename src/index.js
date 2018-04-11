@@ -20,7 +20,7 @@ const CACHE = {};
  * @param {Boolean} [options.dot=false] Include dotfile matches
  * @returns {Array} array containing matching files
  */
-async function glob(str, opts={}) {
+module.exports = async function (str, opts={}) {
   if (!isGlob(str)) {
     return fs.existsSync(str) ? [str] : [];
   }
@@ -67,5 +67,3 @@ async function glob(str, opts={}) {
 
   return matches;
 };
-
-module.exports = glob;
