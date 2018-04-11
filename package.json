@@ -12,8 +12,6 @@
     "globrex": "0.0.2"
   },
   "devDependencies": {
-    "fast-glob": "^2.2.0",
-    "glob": "^7.1.2",
     "tap-spec": "^4.1.1",
     "tape": "^4.8.0"
   }
