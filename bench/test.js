@@ -13,6 +13,7 @@ const opt = { cwd: 'test' };
     /**
      * Make sure I get the same results as node-glob.
      * Test really complex globs.
+     * Test cwd option and strange paths (../tests/../ shit)
      * Test on windows
      */
 
