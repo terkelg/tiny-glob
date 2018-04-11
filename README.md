@@ -39,14 +39,7 @@ This function is `async` and returns a promise.
 
 Type: `String`
 
-Glob string to seach for
-
-#### options
-
-Type: `Object`<br>
-Default: `{ cwd: '.', hidden: false }`
-
-Optional options object
+The glob pattern to match against.
 
 #### options.cwd
 
@@ -55,12 +48,12 @@ Default: `'.'`
 
 Change default working directory
 
-#### options.hidden
+#### options.dot
 
 Type: `Boolean`<br>
 Default: `false`
 
-Exclude hidden files
+Allow patterns to match filenames or directories that begin with a period (`.`).
 
 ## License
 
