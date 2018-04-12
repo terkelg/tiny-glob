@@ -1,6 +1,6 @@
 # tiny-glob
 
-> Fast and super tiny glob library
+> Super fast and tiny glob library
 
 Match files and folders using glob patterns, similar to how shell uses globbing.
 All path are normalized compared to `node-glob`.
@@ -10,6 +10,14 @@ All path are normalized compared to `node-glob`.
 ```
 npm install tiny-glob
 ```
+
+
+## Core Features
+
+- **fast:** faster than both [fast-glob](https://github.com/mrmlnc/fast-glob) and [node-glob](https://github.com/isaacs/node-glob)
+- **powerful:** supports advanced globbing patterns (`ExtGlob`)
+- **tiny**: [add size here] (TODO: UPDATE LATER)
+- **lightweight:** 1 dependenci and only ~100 LOC (TODO: UPDATE LATER)
 
 
 ## Usage
