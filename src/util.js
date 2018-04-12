@@ -69,7 +69,6 @@ function toPath(str) {
   return str.replace(/\\([\*\?\|\[\]\(\)\{\}])/g, '$1');
 }
 
-
 /**
  * Split a path/glob string, and return the glob part.
  * @param {String} str Path/glob string
