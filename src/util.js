@@ -1,4 +1,4 @@
-'use strict';
+const { dirname }  = require('path');
 
 const chars = { '{': '}', '(': ')', '[': ']'};
 
@@ -8,13 +8,13 @@ const chars = { '{': '}', '(': ')', '[': ']'};
  * @returns {Boolean} true if a string has an extglob
  */
 function isExtglob(str) {
-    let match;
-    while ((match = /(\\).|([@?!+*]\(.*\))/g.exec(str))) {
-        if (match[2]) return true;
-        str = str.slice(match.index + match[0].length);
-    }
-    return false;
-};
+  let match;
+  while ((match = /(\\).|([@?!+*]\(.*\))/g.exec(str))) {
+    if (match[2]) return true;
+    str = str.slice(match.index + match[0].length);
+  }
+  return false;
+}
 
 /**
  * Detect if a string cointains glob
@@ -54,6 +54,34 @@ function isGlob(str, { strict = true } = {}) {
     str = str.slice(idx);
   }
   return false;
-};
+}
 
-module.exports = isGlob;
+/**
+ * Find the static part of a glob-path,
+ * split path and return path part
+ * https://github.com/jonschlinkert/glob-parent
+ * @param {String} str Path/glob string
+ * @returns {String} static path section of glob
+ */
+function toPath(str) {
+  str += 'a'; // preserves full path in case of trailing path separator
+  do {str = dirname(str)} while (isGlob(str));
+  return str.replace(/\\([\*\?\|\[\]\(\)\{\}])/g, '$1');
+}
+
+/**
+ * Split a path/glob string, and return the glob part.
+ * @param {String} str Path/glob string
+ * @returns {String} glob part of path
+ */
+function toGlob(str) {
+  const p = toPath(str);
+  if (p === '') return str;
+  if (p === '.') {
+    if (str[1] === '/') return str.substring(2);
+    return str.substring(0);
+  }
+  return str.substring(p.length+1); // skip '/'
+}
+
+module.exports = { isGlob, toGlob, toPath };
