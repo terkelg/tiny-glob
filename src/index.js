@@ -46,6 +46,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @param {String} str Glob string
  * @param {String} [options.cwd='.'] Current working directory
  * @param {Boolean} [options.dot=false] Include dotfile matches
+ * @param {Boolean} [options.absolute=false] Return absolute paths
  * @returns {Array} array containing matching files
  */
 module.exports = async function (str, opts={}) {
