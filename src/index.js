@@ -36,7 +36,7 @@ async function walk(output, rootDir, lexer, opts, dirname='', level=0) {
     if (rgx && !rgx.test(file)) continue;
     isMatch && output.push(fullpath);
 
-    walk(output, rootDir, lexer, opts, relpath, giveup(rgx) ? null : level + 1);
+    await walk(output, rootDir, lexer, opts, relpath, giveup(rgx) ? null : level + 1);
   }
 }
 
