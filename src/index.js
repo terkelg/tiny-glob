@@ -1,15 +1,44 @@
 const fs = require('fs');
 const globrex = require('globrex');
 const { promisify } = require('util');
-const { join, sep, relative, parse } = require('path');
+const { join, resolve, relative } = require('path');
 const { isGlob, toGlob, toPath } = require('./util');
 
-const readdir = promisify(fs.readdir);
-const isUnixHiddenPath = path => (/(^|\/)\.[^\/\.]/g).test(path);
+const isHidden = /(^|\/)\.[^\/\.]/g;
 const giveup = rgx => !rgx || rgx == '/^((?:[^\\/]*(?:\\/|$))*)$/';
-const relativeDir = (parent, child) => relative(parse(parent).name, child);
+const readdir = promisify(fs.readdir);
 
 const CACHE = {};
+
+async function walk(output, prefix, lexer, opts, dirname='', level=0) {
+  const rgx = lexer.segments[level];
+  const dir = join(opts.cwd, prefix, dirname);
+  const files = await readdir(dir);
+
+  let i=0, len=files.length, file;
+  let fullpath, relpath, stats, isMatch;
+
+  for (; i < len; i++) {
+    fullpath = join(dir, file=files[i]);
+    relpath = dirname ? join(dirname, file) : file;
+    if (!opts.dot && isHidden.test(relpath)) continue;
+    isMatch = lexer.regex.test(relpath);
+
+    if ((stats=CACHE[relpath]) === void 0) {
+      CACHE[relpath] = stats = fs.lstatSync(fullpath);
+    }
+
+    if (!stats.isDirectory()) {
+      isMatch && output.push(relative(opts.cwd, fullpath));
+      continue;
+    }
+
+    if (rgx && !rgx.test(file)) continue;
+    isMatch && output.push(join(prefix, relpath));
+
+    await walk(output, prefix, lexer, opts, relpath, giveup(rgx) ? null : level + 1);
+  }
+}
 
 /**
  * Find files using bash-like globbing.
@@ -24,45 +53,11 @@ module.exports = async function (str, opts={}) {
     return fs.existsSync(str) ? [str] : [];
   }
 
-  const matches = [];
-  const cwd = opts.cwd || '.';
-  const prefix = join(cwd, toPath(str));
-  const glob = toGlob(str);
-  const { segments, regex } = globrex(glob, { globstar: true, extended: true });
+  let matches = [];
+  opts.cwd = opts.cwd || '.';
+  const patterns = globrex(toGlob(str), { globstar:true, extended:true });
 
-  async function walk(base = '', level = 0) {
-    const dir = join(prefix, base || sep);
-    const contents = await readdir(dir);
+  await walk(matches, toPath(str), patterns, opts, '.', 0);
 
-    // TODO: For loop for speed
-    await Promise.all(contents.map(file => {
-      const path = join(dir, file);
-      const basepath = join(base, file);
-
-      let stats = CACHE[path];
-      (stats === void 0) && (CACHE[path] = stats = fs.lstatSync(path));
-
-      if (!stats.isDirectory()) {
-        if (regex.test(basepath)) {
-          if (!opts.dot && isUnixHiddenPath(basepath)) return;
-          matches.push(relative(cwd, path));
-        }
-        return;
-      }
-
-      const rgx = segments[level];
-      if (rgx && !rgx.test(file)) return;
-
-      if (regex.test(basepath)) {
-        let dir = cwd === path ? relativeDir(prefix, file) : path;
-        matches.push(dir);
-      }
-
-      return walk(join(basepath, sep), giveup(rgx) ? null : level+1);
-    }));
-  }
-
-  await walk();
-
-  return matches;
+  return opts.absolute ? matches.map(x => resolve(opts.cwd, x)) : matches;
 };

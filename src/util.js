@@ -9,7 +9,7 @@ const chars = { '{': '}', '(': ')', '[': ']'};
  */
 function isExtglob(str) {
   let match;
-  while ((match = /(\\).|([@?!+*]\(.*\))/g.exec(str))) {
+  while (match = /(\\).|([@?!+*]\(.*\))/g.exec(str)) {
     if (match[2]) return true;
     str = str.slice(match.index + match[0].length);
   }
