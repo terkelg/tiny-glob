@@ -1,5 +1,5 @@
 const test = require('tape');
-const { join } = require('path');
+const { join, resolve } = require('path');
 const { order, unixify } = require('./helpers');
 const glob = require('../src');
 
@@ -94,6 +94,28 @@ test('glob: options.cwd', async t => {
   ]);
 });
 
+test('glob: options.cwd (absolute)', async t => {
+  t.plan(2);
+
+  let dir = resolve(cwd, 'one', 'child');
+  let opts = { cwd:dir, absolute:true };
+
+  await isMatch(t, '../*', opts, [
+    resolve(dir, '../a.js'),
+    resolve(dir, '../a.md'),
+    resolve(dir, '../a.txt'),
+    resolve(dir, '../b.txt'),
+    resolve(dir)
+  ]);
+
+  // Ideal: ../child/a.js etc
+  await isMatch(t, '../child/*', opts, [
+    resolve(dir, 'a.js'),
+    resolve(dir, 'a.md'),
+    resolve(dir, 'a.txt')
+  ]);
+});
+
 test('glob: options.dot', async t => {
   t.plan(2);
 
@@ -106,5 +128,23 @@ test('glob: options.dot', async t => {
   await isMatch(t, 'test/fixtures/*.txt', { dot:false }, [
     'test/fixtures/a.txt',
     'test/fixtures/b.txt'
+  ]);
+});
+
+test('glob: options.absolute', async t => {
+  t.plan(2);
+
+  await isMatch(t, 'test/fixtures/*.txt', { absolute:true }, [
+    resolve('test/fixtures/a.txt'),
+    resolve('test/fixtures/b.txt')
+  ]);
+
+  let dir = join(cwd, 'one', 'child');
+  await isMatch(t, '../*', { cwd:dir, absolute:true }, [
+    resolve(dir, '../a.js'),
+    resolve(dir, '../a.md'),
+    resolve(dir, '../a.txt'),
+    resolve(dir, '../b.txt'),
+    resolve(dir)
   ]);
 });
