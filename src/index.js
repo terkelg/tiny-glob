@@ -26,7 +26,7 @@ async function walk(base = '', level = 0) {
     if (!stats.isDirectory()) {
       if (regex.test(basepath)) {
         if (!opts.dot && isUnixHiddenPath(basepath)) return;
-        matches.push(relative(cwd, path));
+        matches.push(path);
       }
       return;
     }
