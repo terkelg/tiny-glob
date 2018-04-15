@@ -1,7 +1,7 @@
 const fs = require('fs');
 const globrex = require('globrex');
 const { promisify } = require('util');
-const { join, resolve, basename, relative } = require('path');
+const { join, resolve, relative } = require('path');
 const { isGlob, toGlob, toPath } = require('./util');
 
 const isHidden = /(^|\/)\.[^\/\.]/g;
@@ -54,10 +54,10 @@ module.exports = async function (str, opts={}) {
   }
 
   let matches = [];
-  const cwd = opts.cwd = opts.cwd || '.';
+  opts.cwd = opts.cwd || '.';
   const patterns = globrex(toGlob(str), { globstar:true, extended:true });
 
   await walk(matches, toPath(str), patterns, opts, '.', 0);
 
-  return matches;
+  return opts.absolute ? matches.map(x => resolve(opts.cwd, x)) : matches;
 };
