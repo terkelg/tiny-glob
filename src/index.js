@@ -10,12 +10,12 @@ const readdir = promisify(fs.readdir);
 
 const CACHE = {};
 
-async function walk(output, rootDir, lexer, opts, dirname='', level=0) {
-  const dir = join(rootDir, dirname);
+async function walk(output, prefix, lexer, opts, dirname='', level=0) {
   const rgx = lexer.segments[level];
+  const dir = join(opts.cwd, prefix, dirname);
   const files = await readdir(dir);
 
-  let i=0, len=files.length, file, val;
+  let i=0, len=files.length, file;
   let fullpath, relpath, stats, isMatch;
 
   for (; i < len; i++) {
@@ -24,19 +24,19 @@ async function walk(output, rootDir, lexer, opts, dirname='', level=0) {
     if (!opts.dot && isHidden.test(relpath)) continue;
     isMatch = lexer.regex.test(relpath);
 
-    if ((stats=CACHE[fullpath]) === void 0) {
-      CACHE[fullpath] = stats = fs.lstatSync(fullpath);
+    if ((stats=CACHE[relpath]) === void 0) {
+      CACHE[relpath] = stats = fs.lstatSync(fullpath);
     }
 
     if (!stats.isDirectory()) {
-      isMatch && output.push(fullpath);
+      isMatch && output.push(relative(opts.cwd, fullpath));
       continue;
     }
 
     if (rgx && !rgx.test(file)) continue;
-    isMatch && output.push(fullpath);
+    isMatch && output.push(join(prefix, relpath));
 
-    await walk(output, rootDir, lexer, opts, relpath, giveup(rgx) ? null : level + 1);
+    await walk(output, prefix, lexer, opts, relpath, giveup(rgx) ? null : level + 1);
   }
 }
 
@@ -54,11 +54,10 @@ module.exports = async function (str, opts={}) {
   }
 
   let matches = [];
-  const pfx = toPath(str);
-  const cwd = opts.cwd || '.';
+  const cwd = opts.cwd = opts.cwd || '.';
   const patterns = globrex(toGlob(str), { globstar:true, extended:true });
 
-  await walk(matches, resolve(cwd, pfx), patterns, opts, '.', 0);
+  await walk(matches, toPath(str), patterns, opts, '.', 0);
 
-  return opts.absolute ? matches : matches.map(x => relative(cwd, x) || join(pfx, basename(x)));
+  return matches;
 };
