@@ -1,8 +1,8 @@
 const fs = require('fs');
 const globrex = require('globrex');
 const globalyzer = require('globalyzer');
-const { promisify } = require('util');
 const { join, resolve, relative } = require('path');
+const { promisify } = require('util');
 
 const isHidden = /(^|\/)\.[^\/\.]/g;
 const giveup = rgx => !rgx || rgx == '/^((?:[^\\/]*(?:\\/|$))*)$/';
