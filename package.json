@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "globalizer": "^0.2.2",
+    "globalyzer": "^0.1.0",
     "globrex": "0.0.2"
   },
   "devDependencies": {

@@ -30,8 +30,7 @@ test('glob: glob', async t => {
   await isMatch(t, 'test/fixtures/../*', {}, [
     'test/fixtures',
     'test/glob.js',
-    'test/helpers',
-    'test/util.js',
+    'test/helpers'
   ]);
 
   await isMatch(t, 'test/fixtures/*', {}, [
@@ -46,16 +45,14 @@ test('glob: glob', async t => {
   ]);
 
   await isMatch(t, 'test/*.{js,txt}', {}, [
-    'test/glob.js',
-    'test/util.js',
+    'test/glob.js'
   ]);
 
   await isMatch(t, './test/*.{js,txt}', {}, [
-    'test/glob.js',
-    'test/util.js'
+    'test/glob.js'
   ]);
 
-  // Ideal: ../robin-glob/test/fixtures/a.mp3
+  // Ideal: ../[parent]/test/fixtures/a.mp3
   await isMatch(t, '../tiny-glob/**/*.{mp3}', {}, ['test/fixtures/a.mp3']);
 
   await isMatch(t, 'test/fixtures/**/*.{mp3}', {}, ['test/fixtures/a.mp3']);

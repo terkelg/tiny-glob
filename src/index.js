@@ -1,8 +1,8 @@
 const fs = require('fs');
 const globrex = require('globrex');
+const globalyzer = require('globalyzer');
 const { promisify } = require('util');
 const { join, resolve, relative } = require('path');
-const { isGlob, toGlob, toPath } = require('./util');
 
 const isHidden = /(^|\/)\.[^\/\.]/g;
 const giveup = rgx => !rgx || rgx == '/^((?:[^\\/]*(?:\\/|$))*)$/';
@@ -50,15 +50,17 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @returns {Array} array containing matching files
  */
 module.exports = async function (str, opts={}) {
-  if (!isGlob(str)) {
+  let glob = globalyzer(str);
+
+  if (!glob.isGlob) {
     return fs.existsSync(str) ? [str] : [];
   }
 
   let matches = [];
   opts.cwd = opts.cwd || '.';
-  const patterns = globrex(toGlob(str), { globstar:true, extended:true });
+  const patterns = globrex(glob.glob, { globstar:true, extended:true });
 
-  await walk(matches, toPath(str), patterns, opts, '.', 0);
+  await walk(matches, glob.base, patterns, opts, '.', 0);
 
   return opts.absolute ? matches.map(x => resolve(opts.cwd, x)) : matches;
 };
