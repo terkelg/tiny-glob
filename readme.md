@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/terkelg/tiny-glob/raw/master/tiny-glob.png" alt="Tiny Glob" width="500" height="320" />
+  <img src="https://github.com/terkelg/tiny-glob/raw/master/tiny-glob.png" alt="Tiny Glob" width="450" height="288" />
 </p>
 
 <h1 align="center">tiny glob</h1>
@@ -16,7 +16,7 @@
   </a>
 </p>
 
-<div align="center"><b>Tiny and super fast library to matches files and folders using glob patterns.</b></div>
+<p align="center"><b>Tiny and super fast library to matches files and folders using glob patterns.</b></p>
 
 <br />
 
@@ -121,9 +121,6 @@ Learn more about advanced globbing
  - [Greg's Wiki](https://mywiki.wooledge.org/glob) 
  - [Bash Extended Globbing](https://www.linuxjournal.com/content/bash-extended-globbing)
 
----
-
-![I Am Glob](https://78.media.tumblr.com/3d4fc779600921f3c1e673181d78187e/tumblr_niltfqGoJt1qa0n48o1_500.gif) 
 
 ## License
 
