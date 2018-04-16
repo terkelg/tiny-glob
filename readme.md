@@ -89,6 +89,13 @@ Default: `false`
 
 Return matches as absolute paths.
 
+#### options.filesOnly
+
+Type: `Boolean`<br>
+Default: `false`
+
+Skip directories and return matched files only.
+
 ## Benchmarks
 
 ```
