@@ -1,9 +1,28 @@
-# tiny-glob
+<div align="center">
+  <img src="https://github.com/terkelg/tiny-glob/raw/master/tiny-glob.png" alt="Tiny Glob" width="500" height="320" />
+</div>
 
-> Super fast and tiny glob library
+<h1 align="center">Tiny Glob</h1>
 
-Match files and folders using glob patterns, similar to how shell uses globbing.
-"Globs" are the patterns you type when you do stuff like `ls *.js` in bash or put `src/*` in a .gitignore file.
+<div align="center">
+  <a href="https://npmjs.org/package/tiny-glob">
+    <img src="https://img.shields.io/npm/v/tiny-glob.svg" alt="version" />
+  </a>
+  <a href="https://travis-ci.org/terkelg/tiny-glob">
+    <img src="https://img.shields.io/travis/terkelg/tiny-glob.svg" alt="travis" />
+  </a>
+  <a href="https://npmjs.org/package/tiny-glob">
+    <img src="https://img.shields.io/npm/dm/tiny-glob.svg" alt="downloads" />
+  </a>
+</div>
+
+<div align="center">Tiny and super fast library to matches files and folders using glob patterns.</div>
+
+<br />
+
+
+"Globs" is the common name for a specific type of pattern used to match files and folders. It's the patterns you type when you do stuff like `ls *.js` in your shell or put `src/*` in a `.gitignore` file. When used to match filenames, it's sometimes called a "wildcard".
+
 
 ## Install
 
@@ -14,9 +33,10 @@ npm install tiny-glob
 
 ## Core Features
 
-- **ultra fast:** 223.40% faster than [node-glob](https://github.com/isaacs/node-glob) and 85.70% faster than [fast-glob](https://github.com/mrmlnc/fast-glob)
-- **powerful:** supports advanced globbing patterns (`ExtGlob`)
-- **tiny**: only ~70 LOC with only 2 small dependencies 
+- 🔥 **ultra fast:** ~250% faster than [node-glob](https://github.com/isaacs/node-glob) and 85.70% faster than [fast-glob](https://github.com/mrmlnc/fast-glob)
+- 💪 **powerful:** supports advanced globbing patterns (`ExtGlob`)
+- 📦 **tiny**: only ~70 LOC with only 2 small dependencies
+- 👫 **friendly**: simple and easy to use api 
 
 
 ## Usage
@@ -34,7 +54,7 @@ const glob = require('tiny-glob');
 ## API
 
 
-### tiny-glob
+### glob(str, options)
 
 Type: `function`<br>
 Returns: `Array`
@@ -86,6 +106,15 @@ Fastest is tiny-glob
 │ tiny-glob │ 0.000010940155968612903 | 91,406.375 │ 251.62% faster │
 └───────────┴─────────────────────────┴────────────┴────────────────┘
 ```
+
+## Advanced Globbing
+
+Learn more about advanced globbing
+
+ - [](https://mywiki.wooledge.org/glob) 
+ - [Bash Extended Globbing](https://www.linuxjournal.com/content/bash-extended-globbing)
+
+---
 
 ![I Am Glob](https://78.media.tumblr.com/3d4fc779600921f3c1e673181d78187e/tumblr_niltfqGoJt1qa0n48o1_500.gif) 
 
