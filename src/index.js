@@ -34,7 +34,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
     }
 
     if (rgx && !rgx.test(file)) continue;
-    isMatch && output.push(join(prefix, relpath));
+    !opts.filesOnly && isMatch && output.push(join(prefix, relpath));
 
     await walk(output, prefix, lexer, opts, relpath, giveup(rgx) ? null : level + 1);
   }
@@ -47,6 +47,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @param {String} [options.cwd='.'] Current working directory
  * @param {Boolean} [options.dot=false] Include dotfile matches
  * @param {Boolean} [options.absolute=false] Return absolute paths
+ * @param {Boolean} [options.filesOnly=false] Do not include folders if true
  * @returns {Array} array containing matching files
  */
 module.exports = async function (str, opts={}) {

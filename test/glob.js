@@ -145,3 +145,27 @@ test('glob: options.absolute', async t => {
     resolve(dir)
   ]);
 });
+
+test('glob: options.filesOnly', async t => {
+  t.plan(2);
+
+  await isMatch(t, 'test/fixtures/*', { filesOnly:true }, [
+    //'test/fixtures/.a-hidden.txt',
+    'test/fixtures/a.js',
+    'test/fixtures/a.mp3',
+    'test/fixtures/a.txt',
+    'test/fixtures/b.js',
+    'test/fixtures/b.txt'
+  ]);
+
+  await isMatch(t, 'test/fixtures/*', { filesOnly:false }, [
+    'test/fixtures/a.js',
+    'test/fixtures/a.mp3',
+    'test/fixtures/a.txt',
+    'test/fixtures/b.js',
+    'test/fixtures/b.txt',
+    'test/fixtures/ond',
+    'test/fixtures/one',
+    'test/fixtures/two'
+  ]);
+});
