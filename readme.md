@@ -16,7 +16,7 @@
   </a>
 </div>
 
-<div align="center">Tiny and super fast library to matches files and folders using glob patterns.</div>
+<div align="center"><b>Tiny and super fast library to matches files and folders using glob patterns.</b></div>
 
 <br />
 
@@ -118,7 +118,7 @@ Fastest is tiny-glob
 
 Learn more about advanced globbing
 
- - [](https://mywiki.wooledge.org/glob) 
+ - [Greg's Wiki](https://mywiki.wooledge.org/glob) 
  - [Bash Extended Globbing](https://www.linuxjournal.com/content/bash-extended-globbing)
 
 ---
