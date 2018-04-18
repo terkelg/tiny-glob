@@ -14,6 +14,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
   const rgx = lexer.segments[level];
   const dir = join(opts.cwd, prefix, dirname);
   const files = await readdir(dir);
+  const { dot, filesOnly } = opts;
 
   let i=0, len=files.length, file;
   let fullpath, relpath, stats, isMatch;
@@ -21,7 +22,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
   for (; i < len; i++) {
     fullpath = join(dir, file=files[i]);
     relpath = dirname ? join(dirname, file) : file;
-    if (!opts.dot && isHidden.test(relpath)) continue;
+    if (!dot && isHidden.test(relpath)) continue;
     isMatch = lexer.regex.test(relpath);
 
     if ((stats=CACHE[relpath]) === void 0) {
@@ -34,7 +35,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
     }
 
     if (rgx && !rgx.test(file)) continue;
-    !opts.filesOnly && isMatch && output.push(join(prefix, relpath));
+    !filesOnly && isMatch && output.push(join(prefix, relpath));
 
     await walk(output, prefix, lexer, opts, relpath, giveup(rgx) ? null : level + 1);
   }
