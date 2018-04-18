@@ -1,7 +1,7 @@
 const test = require('tape');
 const { join, resolve } = require('path');
 const { order, unixify } = require('./helpers');
-const glob = require('../src');
+const glob = require('../');
 
 const cwd = join('test', 'fixtures');
 

@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "files": [
-    "src"
+    "*.js"
   ],
   "scripts": {
     "bench": "node bench",

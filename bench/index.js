@@ -3,7 +3,7 @@ const { Suite } = require('benchmark');
 const assert = require('./assert');
 const { sync } = require('glob');
 const fg = require('fast-glob');
-const curr = require('../src');
+const curr = require('../');
 
 const cwd = __dirname;
 const pattern = 'test/*.js';
