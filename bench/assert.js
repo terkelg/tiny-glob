@@ -3,7 +3,7 @@ const { promisify } = require('util');
 const { order } = require('../test/helpers');
 const glob = promisify(require('glob'));
 const fast = require('fast-glob');
-const tiny = require('../src');
+const tiny = require('../');
 
 let prev;
 
