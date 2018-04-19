@@ -16,7 +16,7 @@
   </a>
 </p>
 
-<p align="center"><b>Tiny and super fast library to matches files and folders using glob patterns.</b></p>
+<p align="center"><b>Tiny and extremely fast library to matche files and folders using glob patterns.</b></p>
 
 <br />
 
@@ -33,7 +33,7 @@ npm install tiny-glob
 
 ## Core Features
 
-- 🔥 **ultra fast:** ~250% faster than [node-glob](https://github.com/isaacs/node-glob) and 85.70% faster than [fast-glob](https://github.com/mrmlnc/fast-glob)
+- 🔥 **extremely fast:** ~350% faster than [node-glob](https://github.com/isaacs/node-glob) and ~230% faster than [fast-glob](https://github.com/mrmlnc/fast-glob)
 - 💪 **powerful:** supports advanced globbing patterns (`ExtGlob`)
 - 📦 **tiny**: only ~70 LOC with only 2 small dependencies
 - 👫 **friendly**: simple and easy to use api 
