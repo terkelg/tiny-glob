@@ -49,14 +49,14 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @param {Boolean} [options.dot=false] Include dotfile matches
  * @param {Boolean} [options.absolute=false] Return absolute paths
  * @param {Boolean} [options.filesOnly=false] Do not include folders if true
+ * @param {Boolean} [options.flush=false] Reset cache object
  * @returns {Array} array containing matching files
  */
 module.exports = async function (str, opts={}) {
   let glob = globalyzer(str);
 
-  if (!glob.isGlob) {
-    return fs.existsSync(str) ? [str] : [];
-  }
+  if (!glob.isGlob) return fs.existsSync(str) ? [str] : [];
+  if (opts.flush) CACHE = {};
 
   let matches = [];
   opts.cwd = opts.cwd || '.';

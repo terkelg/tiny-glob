@@ -96,6 +96,14 @@ Default: `false`
 
 Skip directories and return matched files only.
 
+#### options.flush
+
+Type: `Boolean`<br>
+Default: `false`
+
+Flush the internal cache object.
+
+
 ## Benchmarks
 
 ```
