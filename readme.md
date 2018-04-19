@@ -35,7 +35,7 @@ npm install tiny-glob
 
 - 🔥 **extremely fast:** ~350% faster than [node-glob](https://github.com/isaacs/node-glob) and ~230% faster than [fast-glob](https://github.com/mrmlnc/fast-glob)
 - 💪 **powerful:** supports advanced globbing patterns (`ExtGlob`)
-- 📦 **tiny**: only ~70 LOC with only 2 small dependencies
+- 📦 **tiny**: only ~70 LOC with 2 small dependencies
 - 👫 **friendly**: simple and easy to use api 
 
 
