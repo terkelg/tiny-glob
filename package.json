@@ -24,6 +24,9 @@
     "expansion"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">= 8"
+  },
   "dependencies": {
     "globalyzer": "^0.1.0",
     "globrex": "0.0.2"
