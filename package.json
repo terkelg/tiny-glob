@@ -1,7 +1,7 @@
 {
   "name": "tiny-glob",
   "version": "0.0.1",
-  "description": "",
+  "description": "Tiny and extremely fast globbing",
   "main": "src/index.js",
   "files": [
     "*.js"
@@ -10,8 +10,20 @@
     "bench": "node bench",
     "test": "tape test/*.js | tap-spec"
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Terkel Gjervig",
+    "email": "terkel@terkel.com",
+    "url": "https://terkel.com"
+  },
+  "keywords": [
+    "glob",
+    "globbing",
+    "patterns",
+    "wildcard",
+    "pattern-matching",
+    "expansion"
+  ],
+  "license": "MIT",
   "dependencies": {
     "globalyzer": "^0.1.0",
     "globrex": "0.0.2"
