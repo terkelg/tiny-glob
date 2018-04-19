@@ -16,7 +16,7 @@
   </a>
 </p>
 
-<p align="center"><b>Tiny and extremely fast library to matche files and folders using glob patterns.</b></p>
+<p align="center"><b>Tiny and extremely fast library to match files and folders using glob patterns.</b></p>
 
 <br />
 
