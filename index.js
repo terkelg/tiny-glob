@@ -1,43 +1,78 @@
 const fs = require('fs');
 const globrex = require('globrex');
 const globalyzer = require('globalyzer');
-const { join, resolve, relative } = require('path');
-const { promisify } = require('util');
 
-const isHidden = /(^|\/)\.[^\/\.]/g;
+const isWin = process.platform === 'win32';
+const {
+  join,
+  resolve,
+  relative
+} = require('path');
+const {
+  promisify
+} = require('util');
+
+const isHidden = /(^|\/)\.[^/.]/g;
+// eslint-disable-next-line
 const giveup = rgx => !rgx || rgx == '/^((?:[^\\/]*(?:\\/|$))*)$/';
 const readdir = promisify(fs.readdir);
 
-const CACHE = {};
+let CACHE = {};
 
-async function walk(output, prefix, lexer, opts, dirname='', level=0) {
+async function walk(output, prefix, lexer, opts, dirname = '', level = 0) {
   const rgx = lexer.segments[level];
   const dir = join(opts.cwd, prefix, dirname);
   const files = await readdir(dir);
-  const { dot, filesOnly } = opts;
+  const {
+    dot,
+    filesOnly
+  } = opts;
 
-  let i=0, len=files.length, file;
-  let fullpath, relpath, stats, isMatch;
+  let i = 0;
+  const len = files.length;
+  let file;
+  let fullpath;
+  let relpath;
+  let stats;
+  let isMatch;
+  let tmp;
 
-  for (; i < len; i++) {
-    fullpath = join(dir, file=files[i]);
+  for (; i < len; i += 1) {
+    fullpath = join(dir, file = files[i]);
     relpath = dirname ? join(dirname, file) : file;
-    if (!dot && isHidden.test(relpath)) continue;
-    isMatch = lexer.regex.test(relpath);
+    if (!dot && isHidden.test(relpath)) continue; // eslint-disable-line
 
-    if ((stats=CACHE[relpath]) === void 0) {
-      CACHE[relpath] = stats = fs.lstatSync(fullpath);
+    if (isWin) {
+      tmp = relpath.replace(/\\/g, '/')
+    } else {
+      tmp = relpath
+    }
+
+    isMatch = lexer.regex.test(tmp);
+
+    if (CACHE[relpath]) {
+      stats = CACHE[relpath]
+    } else {
+      stats = fs.lstatSync(fullpath);
+      CACHE[relpath] = stats
     }
 
     if (!stats.isDirectory()) {
-      isMatch && output.push(relative(opts.cwd, fullpath));
-      continue;
+      if (isMatch) {
+        output.push(relative(opts.cwd, fullpath));
+      }
+      continue; //eslint-disable-line
     }
 
-    if (rgx && !rgx.test(file)) continue;
-    !filesOnly && isMatch && output.push(join(prefix, relpath));
+    if (rgx && !rgx.test(file)) continue; //eslint-disable-line
 
-    await walk(output, prefix, lexer, opts, relpath, giveup(rgx) ? null : level + 1);
+    if (!filesOnly && isMatch) {
+      output.push(join(prefix, relpath));
+    }
+
+    // eslint-disable-next-line
+    await walk(output, prefix, lexer, opts, relpath, giveup(rgx) ? null : level +
+      1);
   }
 }
 
@@ -52,15 +87,21 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @param {Boolean} [options.flush=false] Reset cache object
  * @returns {Array} array containing matching files
  */
-module.exports = async function (str, opts={}) {
-  let glob = globalyzer(str);
+module.exports = async (str, opts = {}) => {
+  const glob = globalyzer(str);
 
   if (!glob.isGlob) return fs.existsSync(str) ? [str] : [];
   if (opts.flush) CACHE = {};
 
-  let matches = [];
+  const matches = [];
+
+  // eslint-disable-next-line
   opts.cwd = opts.cwd || '.';
-  const patterns = globrex(glob.glob, { globstar:true, extended:true });
+
+  const patterns = globrex(glob.glob, {
+    globstar: true,
+    extended: true
+  });
 
   await walk(matches, glob.base, patterns, opts, '.', 0);
 
