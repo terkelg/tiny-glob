@@ -29,7 +29,7 @@ async function walk(output, prefix, lexer, opts, dirname = '', level = 0) {
   let i = 0,
     len = files.length,
     file;
-  let fullpath, relpath, stats, isMatch;
+  let fullpath, relpath, stats, isMatch, tmp;
 
   for (; i < len; i++) {
     fullpath = join(dir, file = files[i]);
@@ -37,10 +37,12 @@ async function walk(output, prefix, lexer, opts, dirname = '', level = 0) {
     if (!dot && isHidden.test(relpath)) continue;
 
     if (isWin) {
-      relpath = relpath.replace(/\\/g, '/')
+      tmp = relpath.replace(/\\/g, '/')
+    } else {
+      tmp = relpath
     }
 
-    isMatch = lexer.regex.test(relpath);
+    isMatch = lexer.regex.test(tmp);
 
     if ((stats = CACHE[relpath]) === void 0) {
       CACHE[relpath] = stats = fs.lstatSync(fullpath);

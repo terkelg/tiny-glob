@@ -13,6 +13,7 @@ const cwd = join('test', 'fixtures');
 
 function isMatch(t, str, opts, arr) {
   return glob(str, opts).then(order).then(val => {
+    arr = arr.map(item => unixify(item))
     t.same(val, arr);
   });
 }
