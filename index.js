@@ -1,8 +1,15 @@
 const fs = require('fs');
 const globrex = require('globrex');
 const globalyzer = require('globalyzer');
-const { join, resolve, relative } = require('path');
-const { promisify } = require('util');
+const isWin = process.platform === 'win32';
+const {
+  join,
+  resolve,
+  relative
+} = require('path');
+const {
+  promisify
+} = require('util');
 
 const isHidden = /(^|\/)\.[^\/\.]/g;
 const giveup = rgx => !rgx || rgx == '/^((?:[^\\/]*(?:\\/|$))*)$/';
@@ -10,22 +17,32 @@ const readdir = promisify(fs.readdir);
 
 const CACHE = {};
 
-async function walk(output, prefix, lexer, opts, dirname='', level=0) {
+async function walk(output, prefix, lexer, opts, dirname = '', level = 0) {
   const rgx = lexer.segments[level];
   const dir = join(opts.cwd, prefix, dirname);
   const files = await readdir(dir);
-  const { dot, filesOnly } = opts;
+  const {
+    dot,
+    filesOnly
+  } = opts;
 
-  let i=0, len=files.length, file;
+  let i = 0,
+    len = files.length,
+    file;
   let fullpath, relpath, stats, isMatch;
 
   for (; i < len; i++) {
-    fullpath = join(dir, file=files[i]);
+    fullpath = join(dir, file = files[i]);
     relpath = dirname ? join(dirname, file) : file;
     if (!dot && isHidden.test(relpath)) continue;
+
+    if (isWin) {
+      relpath = relpath.replace(/\\/g, '/')
+    }
+
     isMatch = lexer.regex.test(relpath);
 
-    if ((stats=CACHE[relpath]) === void 0) {
+    if ((stats = CACHE[relpath]) === void 0) {
       CACHE[relpath] = stats = fs.lstatSync(fullpath);
     }
 
@@ -37,7 +54,8 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
     if (rgx && !rgx.test(file)) continue;
     !filesOnly && isMatch && output.push(join(prefix, relpath));
 
-    await walk(output, prefix, lexer, opts, relpath, giveup(rgx) ? null : level + 1);
+    await walk(output, prefix, lexer, opts, relpath, giveup(rgx) ? null : level +
+      1);
   }
 }
 
@@ -52,7 +70,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @param {Boolean} [options.flush=false] Reset cache object
  * @returns {Array} array containing matching files
  */
-module.exports = async function (str, opts={}) {
+module.exports = async function(str, opts = {}) {
   let glob = globalyzer(str);
 
   if (!glob.isGlob) return fs.existsSync(str) ? [str] : [];
@@ -60,7 +78,10 @@ module.exports = async function (str, opts={}) {
 
   let matches = [];
   opts.cwd = opts.cwd || '.';
-  const patterns = globrex(glob.glob, { globstar:true, extended:true });
+  const patterns = globrex(glob.glob, {
+    globstar: true,
+    extended: true
+  });
 
   await walk(matches, glob.base, patterns, opts, '.', 0);
 
