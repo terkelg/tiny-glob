@@ -4,16 +4,22 @@
   "description": "Tiny and extremely fast globbing",
   "main": "src/index.js",
   "files": [
-    "*.js"
+    "index.js"
   ],
   "scripts": {
     "bench": "node bench",
-    "test": "tape test/*.js | tap-spec"
+    "test": "tape test/*.js | tap-spec",
+    "lint": "eslint --ext .js -f ./node_modules/eslint-friendly-formatter ./",
+    "lint:fix": "eslint --ext .js -f ./node_modules/eslint-friendly-formatter --fix ./"
   },
   "author": {
     "name": "Terkel Gjervig",
     "email": "terkel@terkel.com",
     "url": "https://terkel.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/terkelg/tiny-glob"
   },
   "keywords": [
     "glob",
@@ -30,6 +36,15 @@
   },
   "devDependencies": {
     "tap-spec": "^4.1.1",
-    "tape": "^4.8.0"
+    "tape": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-react": "^7.7.0",
+    "eslint": "^4.19.1"
   }
 }

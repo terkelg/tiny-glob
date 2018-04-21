@@ -13,8 +13,8 @@ const cwd = join('test', 'fixtures');
 
 function isMatch(t, str, opts, arr) {
   return glob(str, opts).then(order).then(val => {
-    arr = arr.map(item => unixify(item))
-    t.same(val, arr);
+    const unixifiedOutput = arr.map(item => unixify(item))
+    t.same(val, unixifiedOutput);
   });
 }
 
@@ -82,7 +82,7 @@ test('glob: glob', async t => {
 test('glob: options.cwd', async t => {
   t.plan(2);
 
-  let dir = join(cwd, 'one', 'child');
+  const dir = join(cwd, 'one', 'child');
 
   await isMatch(t, '../*', {
     cwd: dir
@@ -107,8 +107,8 @@ test('glob: options.cwd', async t => {
 test('glob: options.cwd (absolute)', async t => {
   t.plan(2);
 
-  let dir = resolve(cwd, 'one', 'child');
-  let opts = {
+  const dir = resolve(cwd, 'one', 'child');
+  const opts = {
     cwd: dir,
     absolute: true
   };
@@ -158,7 +158,7 @@ test('glob: options.absolute', async t => {
     resolve('test/fixtures/b.txt')
   ]);
 
-  let dir = join(cwd, 'one', 'child');
+  const dir = join(cwd, 'one', 'child');
   await isMatch(t, '../*', {
     cwd: dir,
     absolute: true
@@ -177,7 +177,7 @@ test('glob: options.filesOnly', async t => {
   await isMatch(t, 'test/fixtures/*', {
     filesOnly: true
   }, [
-    //'test/fixtures/.a-hidden.txt',
+    // 'test/fixtures/.a-hidden.txt',
     'test/fixtures/a.js',
     'test/fixtures/a.mp3',
     'test/fixtures/a.txt',
