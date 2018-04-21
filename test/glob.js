@@ -12,8 +12,9 @@ const glob = require('../');
 const cwd = join('test', 'fixtures');
 
 function isMatch(t, str, opts, arr) {
+  const unixifiedOutput = arr.map(item => unixify(item))
+
   return glob(str, opts).then(order).then(val => {
-    const unixifiedOutput = arr.map(item => unixify(item))
     t.same(val, unixifiedOutput);
   });
 }
