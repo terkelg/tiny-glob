@@ -6,6 +6,7 @@ const glob = require('../');
 const cwd = join('test', 'fixtures');
 
 function isMatch(t, str, opts, arr) {
+  arr = arr.map(unixify)
   return glob(str, opts).then(order).then(val => {
     t.same(val, arr);
   });
@@ -20,9 +21,9 @@ test('glob: standard', async t => {
 test('glob: glob', async t => {
   t.plan(13);
 
-  t.same(await glob('').then(unixify), []);
-  t.same(await glob('.').then(unixify), ['.']);
-  t.same(await glob('./').then(unixify), ['./']);
+  t.same(await glob(''), []);
+  t.same(await glob('.'), ['.']);
+  t.same(await glob('./'), ['./']);
 
   await isMatch(t, 'test/fixtures', {}, ['test/fixtures']);
 
