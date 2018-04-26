@@ -31,5 +31,6 @@
   "devDependencies": {
     "tap-spec": "^4.1.1",
     "tape": "^4.8.0"
-  }
+  },
+  "types": "./index.d.ts"
 }
