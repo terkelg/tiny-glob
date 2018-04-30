@@ -7,7 +7,7 @@ const isHidden = /(^|\/)\.[^\/\.]/g;
 const giveup = rgx => !rgx || rgx == '/^((?:[^\\/]*(?:\\/|$))*)$/';
 const isWin = process.platform === 'win32';
 
-const CACHE = {};
+let CACHE = {};
 
 function walk(output, prefix, lexer, opts, dirname='', level=0) {
   const rgx = lexer.segments[level];
