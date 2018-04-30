@@ -7,6 +7,7 @@ const { promisify } = require('util');
 const isHidden = /(^|\/)\.[^\/\.]/g;
 const giveup = rgx => !rgx || rgx == '/^((?:[^\\/]*(?:\\/|$))*)$/';
 const readdir = promisify(fs.readdir);
+const isWin = process.platform === 'win32';
 
 let CACHE = {};
 
@@ -17,13 +18,20 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
   const { dot, filesOnly } = opts;
 
   let i=0, len=files.length, file;
-  let fullpath, relpath, stats, isMatch;
+  let fullpath, relpath, stats, isMatch, tmp;
 
   for (; i < len; i++) {
     fullpath = join(dir, file=files[i]);
     relpath = dirname ? join(dirname, file) : file;
     if (!dot && isHidden.test(relpath)) continue;
-    isMatch = lexer.regex.test(relpath);
+
+    if (isWin) {
+      tmp = relpath.replace(/\\/g, '/')
+    } else {
+      tmp = relpath
+    }
+
+    isMatch = lexer.regex.test(tmp);
 
     if ((stats=CACHE[relpath]) === void 0) {
       CACHE[relpath] = stats = fs.lstatSync(fullpath);
