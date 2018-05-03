@@ -20,9 +20,9 @@ test('glob: standard', async t => {
 test('glob: glob', async t => {
   t.plan(13);
 
-  t.same(await glob('').then(unixify), []);
-  t.same(await glob('.').then(unixify), ['.']);
-  t.same(await glob('./').then(unixify), ['./']);
+  t.same(await glob(''), []);
+  t.same(await glob('.'), ['.']);
+  t.same(await glob('./'), ['./']);
 
   await isMatch(t, 'test/fixtures', {}, ['test/fixtures']);
 
