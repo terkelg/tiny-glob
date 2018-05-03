@@ -40,7 +40,7 @@ npm install tiny-glob
 - 💪 **powerful:** supports advanced globbing patterns (`ExtGlob`)
 - 📦 **tiny**: only ~70 LOC with 2 small dependencies
 - 👫 **friendly**: simple and easy to use api
-- 🎭 **cross-platoform**: supports both unix and windows
+- 🎭 **cross-platform**: supports both unix and windows
 
 
 ## Usage
