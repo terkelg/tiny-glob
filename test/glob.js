@@ -6,6 +6,7 @@ const glob = require('../');
 const cwd = join('test', 'fixtures');
 
 function isMatch(t, str, opts, arr) {
+  arr = arr.map(unixify);
   return glob(str, opts).then(order).then(val => {
     t.same(val, arr);
   });
