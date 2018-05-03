@@ -5,7 +5,7 @@ const { join, resolve, relative } = require('path');
 const { promisify } = require('util');
 
 const isHidden = /(^|\/)\.[^\/\.]/g;
-const giveup = rgx => !rgx || rgx == '/^((?:[^\\/]*(?:\\/|$))*)$/';
+const giveup = rgx => !rgx || rgx == '/^((?:[^\\/]*(?:\\/|$))*)$/' || rgx == '/^((?:[^\\\\]*(?:\\\\|$))*)$/';
 const readdir = promisify(fs.readdir);
 
 let CACHE = {};
