@@ -3,9 +3,7 @@ const globrex = require('globrex');
 const globalyzer = require('globalyzer');
 const { join, resolve, relative } = require('path');
 const { promisify } = require('util');
-
 const isHidden = /(^|\/)\.[^\/\.]/g;
-const giveup = rgx => !rgx || rgx == '/^((?:[^\\/]*(?:\\/|$))*)$/' || rgx == '/^((?:[^\\\\]*(?:\\\\|$))*)$/';
 const readdir = promisify(fs.readdir);
 
 let CACHE = {};
@@ -37,7 +35,8 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
     if (rgx && !rgx.test(file)) continue;
     !filesOnly && isMatch && output.push(join(prefix, relpath));
 
-    await walk(output, prefix, lexer, opts, relpath, giveup(rgx) ? null : level + 1);
+    console.log(lexer.globstar.toString(), rgx && rgx.toString());
+    await walk(output, prefix, lexer, opts, relpath, !rgx || `${rgx}` == lexer.globstar ? null : level + 1);
   }
 }
 
