@@ -11,6 +11,9 @@
   <a href="https://travis-ci.org/terkelg/tiny-glob">
     <img src="https://img.shields.io/travis/terkelg/tiny-glob.svg" alt="travis" />
   </a>
+  <a href="https://ci.appveyor.com/project/terkelg/tiny-glob/branch/master">
+    <img src="https://ci.appveyor.com/api/projects/status/qe8sm2c7mwm0hxud/branch/master?svg=true" alt="AppVeyor"/>
+  </a>
   <a href="https://npmjs.org/package/tiny-glob">
     <img src="https://img.shields.io/npm/dm/tiny-glob.svg" alt="downloads" />
   </a>
@@ -36,7 +39,8 @@ npm install tiny-glob
 - 🔥 **extremely fast:** ~350% faster than [node-glob](https://github.com/isaacs/node-glob) and ~230% faster than [fast-glob](https://github.com/mrmlnc/fast-glob)
 - 💪 **powerful:** supports advanced globbing patterns (`ExtGlob`)
 - 📦 **tiny**: only ~70 LOC with 2 small dependencies
-- 👫 **friendly**: simple and easy to use api 
+- 👫 **friendly**: simple and easy to use api
+- 🎭 **cross-platform**: supports both unix and windows
 
 
 ## Usage
@@ -67,6 +71,7 @@ This function is `async` and returns a promise.
 Type: `String`
 
 The glob pattern to match against.
+> **OBS**: Please only use forward-slashes in glob expressions. Even on [windows](#windows)
 
 #### options.cwd
 
@@ -104,6 +109,13 @@ Default: `false`
 Flush the internal cache object.
 
 
+## Windows
+
+Though Windows may use `/`, `\`, or `\\` as path separators, you can **only** use forward-slashes (`/`) when specifying glob expressions. Any back-slashes (`\`) will be interpreted as escape characters instead of path separators.
+
+This is common across many glob-based modules; see [`node-glob`](https://github.com/isaacs/node-glob#windows) for corroboration.
+
+
 ## Benchmarks
 
 ```
@@ -126,7 +138,7 @@ Fastest is tiny-glob
 
 Learn more about advanced globbing
 
- - [Greg's Wiki](https://mywiki.wooledge.org/glob) 
+ - [Greg's Wiki](https://mywiki.wooledge.org/glob)
  - [Bash Extended Globbing](https://www.linuxjournal.com/content/bash-extended-globbing)
 
 
