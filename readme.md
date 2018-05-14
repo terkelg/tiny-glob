@@ -109,6 +109,16 @@ Default: `false`
 Flush the internal cache object.
 
 
+## Sync API
+
+There's a syncronus version is avalible with similar API:
+
+```js
+const glob = require('tiny-glob/sync');
+let files = glob('src/*/*.{js,md}');
+```
+
+
 ## Windows
 
 Though Windows may use `/`, `\`, or `\\` as path separators, you can **only** use forward-slashes (`/`) when specifying glob expressions. Any back-slashes (`\`) will be interpreted as escape characters instead of path separators.
