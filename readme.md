@@ -111,10 +111,9 @@ Flush the internal cache object.
 
 ## Windows
 
-Though windows uses either `/` or `\` as its path separator, only `/`
-characters are used by the `tiny-glob` implementation. You must use
-forward-slashes **only** in glob expressions. Back-slashes will always
-be interpreted as escape characters, not path separators.
+Though Windows may use `/`, `\`, or `\\` as path separators, you can **only** use forward-slashes (`/`) when specifying glob expressions. Any back-slashes (`\`) will be interpreted as escape characters instead of path separators.
+
+This is common across many glob-based modules; see [`node-glob`](https://github.com/isaacs/node-glob#windows) for corroboration.
 
 
 ## Benchmarks
