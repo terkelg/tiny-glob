@@ -1,11 +1,10 @@
 const fs = require('fs');
 const globrex = require('globrex');
+const { promisify } = require('util');
 const globalyzer = require('globalyzer');
 const { join, resolve, relative } = require('path');
-const { promisify } = require('util');
-const isHidden = /(^|\/)\.[^\/\.]/g;
+const isHidden = /(^|[\\\/])\.[^\\\/\.]/g;
 const readdir = promisify(fs.readdir);
-
 let CACHE = {};
 
 async function walk(output, prefix, lexer, opts, dirname='', level=0) {
