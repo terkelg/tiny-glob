@@ -60,6 +60,7 @@ module.exports = async function (str, opts={}) {
   opts.cwd = opts.cwd || '.';
   const { path } = globrex(glob.glob, { filepath:true, globstar:true, extended:true });
 
+  path.globstar = path.globstar.toString();
   await walk(matches, glob.base, path, opts, '.', 0);
 
   return opts.absolute ? matches.map(x => resolve(opts.cwd, x)) : matches;
