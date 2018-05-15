@@ -35,7 +35,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
     if (rgx && !rgx.test(file)) continue;
     !filesOnly && isMatch && output.push(join(prefix, relpath));
 
-    await walk(output, prefix, lexer, opts, relpath, rgx && rgx.toString() !== lexer.globster && ++level);
+    await walk(output, prefix, lexer, opts, relpath, rgx && rgx.toString() !== lexer.globstar && ++level);
   }
 }
 
