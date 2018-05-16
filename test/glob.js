@@ -3,7 +3,7 @@ const { join, resolve } = require('path');
 const { order, unixify } = require('./helpers');
 const glob = require('../');
 
-const cwd = join('test', 'fixtures');
+const cwd = join(__dirname, 'fixtures');
 
 function isMatch(t, str, opts, arr) {
   arr = arr.map(unixify);
@@ -19,7 +19,7 @@ test('glob: standard', async t => {
 });
 
 test('glob: glob', async t => {
-  t.plan(13);
+  t.plan(14);
 
   t.same(await glob(''), []);
   t.same(await glob('.'), ['.']);
@@ -68,6 +68,20 @@ test('glob: glob', async t => {
     'test/fixtures/b.js',
     'test/fixtures/b.txt',
     'test/fixtures/one/b.txt'
+  ]);
+
+  await isMatch(t, '**/*.{txt,js}', { cwd }, [
+    'a.js',
+    'a.txt',
+    'b.js',
+    'b.txt',
+    'ond/a.txt',
+    'one/a.js',
+    'one/a.txt',
+    'one/b.txt',
+    'one/child/a.js',
+    'one/child/a.txt',
+    'two/a.txt'
   ]);
 });
 
