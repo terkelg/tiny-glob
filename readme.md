@@ -17,6 +17,9 @@
   <a href="https://npmjs.org/package/tiny-glob">
     <img src="https://img.shields.io/npm/dm/tiny-glob.svg" alt="downloads" />
   </a>
+  <a href="https://packagephobia.now.sh/result?p=tiny-glob">
+    <img src="https://packagephobia.now.sh/badge?p=tiny-glob" alt="install size" />
+  </a>
 </p>
 
 <p align="center"><b>Tiny and extremely fast library to match files and folders using glob patterns.</b></p>
