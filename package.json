@@ -4,7 +4,10 @@
   "description": "Tiny and extremely fast globbing",
   "main": "./index.js",
   "files": [
-    "*.js"
+    "*.js",
+    "./lib/*.js",
+    "./src/*.js",
+    "./index.d.ts"
   ],
   "scripts": {
     "bench": "node bench",
