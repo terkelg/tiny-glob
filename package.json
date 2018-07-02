@@ -2,13 +2,17 @@
   "name": "tiny-glob",
   "version": "0.2.2",
   "description": "Tiny and extremely fast globbing",
-  "main": "src/index.js",
+  "main": "./index.js",
   "files": [
-    "*.js"
+    "*.js",
+    "./lib/*.js",
+    "./src/*.js",
+    "./index.d.ts"
   ],
   "scripts": {
     "bench": "node bench",
-    "test": "tape test/*.js | tap-spec"
+    "test": "tape test/*.js | tap-spec",
+    "prepublish": "babel src -d lib"
   },
   "author": {
     "name": "Terkel Gjervig",
@@ -30,8 +34,13 @@
     "globrex": "^0.1.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.8.0"
   },
-  "types": "./index.d.ts"
+  "types": "./index.d.ts",
+  "engines": {
+    "node": ">= 6.0.0"
+  }
 }
