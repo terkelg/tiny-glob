@@ -5,18 +5,7 @@ const globalyzer = require('globalyzer');
 const { join, resolve, relative } = require('path');
 const isHidden = /(^|[\\\/])\.[^\\\/\.]/g;
 const readdir = promisify(fs.readdir);
-const lstat = promisify(fs.lstat);
-const access = promisify(fs.access);
 let CACHE = {};
-
-async function exists(filePath) {
-  try {
-    await access(filePath, fs.constants.F_OK);
-    return true;
-  } catch(e) {
-    return false;
-  }
-}
 
 async function walk(output, prefix, lexer, opts, dirname='', level=0) {
   const rgx = lexer.segments[level];
@@ -34,7 +23,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
     isMatch = lexer.regex.test(relpath);
 
     if ((stats=CACHE[relpath]) === void 0) {
-      CACHE[relpath] = stats = await lstat(fullpath);
+      CACHE[relpath] = stats = fs.lstatSync(fullpath);
     }
 
     if (!stats.isDirectory()) {
@@ -65,7 +54,7 @@ module.exports = async function (str, opts={}) {
 
   
   if (!glob.isGlob)  {
-    return (await exists(str)) ? [str] : [];
+    return fs.existsSync(str) ? [str] : [];
   }
   if (opts.flush) CACHE = {};
 
