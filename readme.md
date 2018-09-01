@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/terkelg/tiny-glob/raw/master/tiny-glob.png" alt="Tiny Glob" width="450" height="288" />
+  <img src="https://github.com/terkelg/tiny-glob/raw/master/tiny-glob.png" alt="Tiny Glob" width="450" />
 </p>
 
 <h1 align="center">tiny glob</h1>
