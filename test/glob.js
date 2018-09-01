@@ -19,7 +19,7 @@ test('glob: standard', async t => {
 });
 
 test('glob: glob', async t => {
-  t.plan(14);
+  t.plan(15);
 
   t.same(await glob(''), []);
   t.same(await glob('.'), ['.']);
@@ -81,7 +81,16 @@ test('glob: glob', async t => {
     'one/b.txt',
     'one/child/a.js',
     'one/child/a.txt',
-    'two/a.txt'
+    'two/a.txt',
+    'two/child/a.txt'
+  ]);
+
+  await isMatch(t, '{one,two}/**/*.{txt}', {cwd: join(__dirname, 'fixtures')}, [
+    'one/a.txt',
+    'one/b.txt',
+    'one/child/a.txt',
+    'two/a.txt',
+    'two/child/a.txt'
   ]);
 });
 
