@@ -16,6 +16,9 @@
     "email": "terkel@terkel.com",
     "url": "https://terkel.com"
   },
+  "engines" : {
+    "node": ">=8.0.0"
+  },
   "keywords": [
     "glob",
     "globbing",
