@@ -55,7 +55,7 @@ module.exports = async function (str, opts={}) {
   let glob = globalyzer(str);
 
   opts.cwd = opts.cwd || '.';
-  if (!glob.isGlob) return fs.existsSync(join(opts.cwd, str)) ? [str] : [];
+  if (!glob.isGlob) return fs.existsSync(resolve(opts.cwd, str)) ? [str] : [];
   if (opts.flush) CACHE = {};
 
   let matches = [];
