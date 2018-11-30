@@ -106,6 +106,14 @@ test('glob: options.cwd', async t => {
   ]);
 });
 
+test('glob: options.cwd (without glob)', async t => {
+  t.plan(1);
+
+  let dir = join(cwd, 'one', 'child');
+
+  await isMatch(t, '../child/a.js', { cwd:dir }, [ '../child/a.js' ]);
+});
+
 test('glob: options.cwd (absolute)', async t => {
   t.plan(2);
 

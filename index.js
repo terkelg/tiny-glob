@@ -50,13 +50,15 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @returns {Array} array containing matching files
  */
 module.exports = async function (str, opts={}) {
+  if (!str) return [];
+
   let glob = globalyzer(str);
 
-  if (!glob.isGlob) return fs.existsSync(str) ? [str] : [];
+  opts.cwd = opts.cwd || '.';
+  if (!glob.isGlob) return fs.existsSync(resolve(opts.cwd, str)) ? [str] : [];
   if (opts.flush) CACHE = {};
 
   let matches = [];
-  opts.cwd = opts.cwd || '.';
   const { path } = globrex(glob.glob, { filepath:true, globstar:true, extended:true });
 
   path.globstar = path.globstar.toString();
