@@ -169,6 +169,16 @@ test('glob: options.absolute', async t => {
   ]);
 });
 
+test('glob: options.absolute (without glob)', async t => {
+  t.plan(1);
+
+  let dir = join(cwd, 'one', 'child');
+
+  await isMatch(t, '../child/a.js', { cwd:dir, absolute:true }, [
+    resolve(dir, '../child/a.js')
+  ]);
+});
+
 test('glob: options.filesOnly', async t => {
   t.plan(2);
 
