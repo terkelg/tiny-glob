@@ -50,7 +50,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @returns {Array} array containing matching files
  */
 module.exports = async function (str, opts={}) {
-  if (str === '') return [];
+  if (!str) return [];
 
   let glob = globalyzer(str);
 
