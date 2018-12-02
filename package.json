@@ -1,6 +1,6 @@
 {
   "name": "tiny-glob",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Tiny and extremely fast globbing",
   "main": "src/index.js",
   "files": [
