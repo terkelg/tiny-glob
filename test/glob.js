@@ -1,6 +1,6 @@
 const test = require('tape');
 const { join, resolve } = require('path');
-const { order, unixify } = require('./helpers');
+const { order, unixify, toVFile, VFile } = require('./helpers');
 const glob = require('../');
 
 const cwd = join(__dirname, 'fixtures');
@@ -14,7 +14,7 @@ function isMatch(t, str, opts, arr) {
 
 test('glob: standard', async t => {
   t.plan(2);
-  t.is(typeof glob, 'function', 'consturctor is a typeof function');
+  t.is(typeof glob, 'function', 'constructor is a typeof function');
   t.true(Array.isArray(await glob('')), 'returns array');
 });
 
@@ -91,11 +91,12 @@ test('glob: options.cwd', async t => {
   let dir = join(cwd, 'one', 'child');
 
   await isMatch(t, '../*', { cwd:dir }, [
+    '',
     '../a.js',
     '../a.md',
     '../a.txt',
     '../b.txt',
-    '../child'
+    // '../child' is in fact resolved to '' related to himself !
   ]);
 
   // Ideal: ../child/a.js etc
@@ -201,4 +202,17 @@ test('glob: options.filesOnly', async t => {
     'test/fixtures/one',
     'test/fixtures/two'
   ]);
+});
+
+test('glob: options.mount', async t => {
+  t.plan(2);
+
+  let vfiles = await glob('*.js', {mount: toVFile, filesOnly: true})
+
+  t.true(vfiles.every(item => item instanceof VFile), 'mounted items are now instances of VFile');
+  t.same(
+    vfiles.map(vfile => vfile.path), [
+      'index.js', 'sync.js'
+    ]
+  )
 });
