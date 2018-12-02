@@ -85,6 +85,12 @@ test('glob: glob', async t => {
   ]);
 });
 
+test("glob: path dosen't exist (without glob)", async t => {
+  t.plan(1);
+
+  await isMatch(t, 'z.js', { cwd }, [ ]);
+});
+
 test('glob: options.cwd', async t => {
   t.plan(2);
 
@@ -200,5 +206,15 @@ test('glob: options.filesOnly', async t => {
     'test/fixtures/ond',
     'test/fixtures/one',
     'test/fixtures/two'
+  ]);
+});
+
+test('glob: options.filesOnly (without glob)', async t => {
+  t.plan(2);
+
+  await isMatch(t, 'test/fixtures/one', { filesOnly:true }, []);
+
+  await isMatch(t, 'test/fixtures/one', { filesOnly:false }, [
+    'test/fixtures/one',
   ]);
 });

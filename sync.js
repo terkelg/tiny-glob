@@ -51,7 +51,20 @@ function walk(output, prefix, lexer, opts, dirname='', level=0) {
 module.exports = function (str, opts={}) {
   let glob = globalyzer(str);
 
-  if (!glob.isGlob) return fs.existsSync(str) ? [str] : [];
+  if (!glob.isGlob) {
+    try {
+      let resolved = resolve(opts.cwd, str);
+      let dirent = fs.statSync(resolved);
+      if (opts.filesOnly && !dirent.isFile()) return []
+
+      return opts.absolute ? [resolved] : [str];
+    } catch (err) {
+      if (err.code != 'ENOENT') throw err;
+
+      return []
+    }
+  }
+
   if (opts.flush) CACHE = {};
 
   let matches = [];
