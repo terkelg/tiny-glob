@@ -49,7 +49,11 @@ function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @returns {Array} array containing matching files
  */
 module.exports = function (str, opts={}) {
+  if (!str) return [];
+
   let glob = globalyzer(str);
+
+  opts.cwd = opts.cwd || '.';
 
   if (!glob.isGlob) {
     try {
@@ -61,14 +65,13 @@ module.exports = function (str, opts={}) {
     } catch (err) {
       if (err.code != 'ENOENT') throw err;
 
-      return []
+      return [];
     }
   }
 
   if (opts.flush) CACHE = {};
 
   let matches = [];
-  opts.cwd = opts.cwd || '.';
   const { path } = globrex(glob.glob, { filepath:true, globstar:true, extended:true });
 
   path.globstar = path.globstar.toString();

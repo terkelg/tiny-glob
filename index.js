@@ -61,13 +61,13 @@ module.exports = async function (str, opts={}) {
     try {
       let resolved = resolve(opts.cwd, str);
       let dirent = await stat(resolved);
-      if (opts.filesOnly && !dirent.isFile()) return []
+      if (opts.filesOnly && !dirent.isFile()) return [];
 
       return opts.absolute ? [resolved] : [str];
     } catch (err) {
       if (err.code != 'ENOENT') throw err;
 
-      return []
+      return [];
     }
   }
 
