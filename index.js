@@ -5,6 +5,7 @@ const globalyzer = require('globalyzer');
 const { join, resolve, relative } = require('path');
 const isHidden = /(^|[\\\/])\.[^\\\/\.]/g;
 const readdir = promisify(fs.readdir);
+const stat = promisify(fs.stat);
 let CACHE = {};
 
 async function walk(output, prefix, lexer, opts, dirname='', level=0) {
@@ -57,10 +58,17 @@ module.exports = async function (str, opts={}) {
   opts.cwd = opts.cwd || '.';
 
   if (!glob.isGlob) {
-    let resolved = resolve(opts.cwd, str);
-    if (!fs.existsSync(resolved)) return []
+    try {
+      let resolved = resolve(opts.cwd, str);
+      let dirent = await stat(resolved);
+      if (opts.filesOnly && !dirent.isFile()) return []
 
-    return opts.absolute ? [resolved] : [str];
+      return opts.absolute ? [resolved] : [str];
+    } catch (err) {
+      if (err.code != 'ENOENT') throw err;
+
+      return []
+    }
   }
 
   if (opts.flush) CACHE = {};
