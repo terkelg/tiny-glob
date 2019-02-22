@@ -10,7 +10,7 @@ let CACHE = {};
 
 async function walk(output, prefix, lexer, opts, dirname='', level=0) {
   const rgx = lexer.segments[level];
-  const dir = join(opts.cwd, prefix, dirname);
+  const dir = resolve(opts.cwd, prefix, dirname);
   const files = await readdir(dir);
   const { dot, filesOnly } = opts;
 
@@ -18,7 +18,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
   let fullpath, relpath, stats, isMatch;
 
   for (; i < len; i++) {
-    fullpath = join(dir, file=files[i]);
+    fullpath = resolve(dir, file=files[i]);
     relpath = dirname ? join(dirname, file) : file;
     if (!dot && isHidden.test(relpath)) continue;
     isMatch = lexer.regex.test(relpath);
