@@ -19,7 +19,7 @@ test('glob: standard', async t => {
 });
 
 test('glob: glob', async t => {
-  t.plan(14);
+  t.plan(15);
 
   t.same(await glob(''), []);
   t.same(await glob('.'), ['.']);
@@ -32,6 +32,12 @@ test('glob: glob', async t => {
     'test/fixtures',
     'test/glob.js',
     'test/helpers'
+  ]);
+
+  await isMatch(t, '*', { cwd: __dirname }, [
+    'fixtures',
+    'glob.js',
+    'helpers'
   ]);
 
   await isMatch(t, 'test/fixtures/*', {}, [
