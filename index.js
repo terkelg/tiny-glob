@@ -18,7 +18,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
   let fullpath, relpath, stats, isMatch;
 
   for (; i < len; i++) {
-    fullpath = resolve(dir, file=files[i]);
+    fullpath = join(dir, file=files[i]);
     relpath = dirname ? join(dirname, file) : file;
     if (!dot && isHidden.test(relpath)) continue;
     isMatch = lexer.regex.test(relpath);
