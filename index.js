@@ -55,18 +55,16 @@ module.exports = async function (str, opts={}) {
 
   let glob = globalyzer(str);
 
-  opts.cwd = opts.cwd || '.';
+  opts.cwd = resolve(opts.cwd || '.');
 
   if (!glob.isGlob) {
     try {
-      let resolved = resolve(opts.cwd, str);
+      let resolved = join(opts.cwd, str);
       let dirent = await stat(resolved);
       if (opts.filesOnly && !dirent.isFile()) return [];
-
       return opts.absolute ? [resolved] : [str];
     } catch (err) {
       if (err.code != 'ENOENT') throw err;
-
       return [];
     }
   }
@@ -79,5 +77,5 @@ module.exports = async function (str, opts={}) {
   path.globstar = path.globstar.toString();
   await walk(matches, glob.base, path, opts, '.', 0);
 
-  return opts.absolute ? matches.map(x => resolve(opts.cwd, x)) : matches;
+  return opts.absolute ? matches.map(x => join(opts.cwd, x)) : matches;
 };
