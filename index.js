@@ -10,7 +10,7 @@ let CACHE = {};
 
 async function walk(output, prefix, lexer, opts, dirname='', level=0) {
   const rgx = lexer.segments[level];
-  const dir = join(opts.cwd, prefix, dirname);
+  const dir = resolve(opts.cwd, prefix, dirname);
   const files = await readdir(dir);
   const { dot, filesOnly } = opts;
 
