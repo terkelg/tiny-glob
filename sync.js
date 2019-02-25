@@ -52,30 +52,26 @@ module.exports = function (str, opts={}) {
   if (!str) return [];
 
   let glob = globalyzer(str);
-
-  opts.cwd = opts.cwd || '.';
+  opts.cwd = resolve(opts.cwd || '.');
 
   if (!glob.isGlob) {
     try {
-      let resolved = resolve(opts.cwd, str);
+      let resolved = join(opts.cwd, str);
       let dirent = fs.statSync(resolved);
       if (opts.filesOnly && !dirent.isFile()) return []
-
       return opts.absolute ? [resolved] : [str];
     } catch (err) {
       if (err.code != 'ENOENT') throw err;
-
       return [];
     }
   }
 
-  if (opts.flush) CACHE = {};
-
   let matches = [];
+  if (opts.flush) CACHE = {};
   const { path } = globrex(glob.glob, { filepath:true, globstar:true, extended:true });
 
   path.globstar = path.globstar.toString();
   walk(matches, glob.base, path, opts, '.', 0);
 
-  return opts.absolute ? matches.map(x => resolve(opts.cwd, x)) : matches;
+  return opts.absolute ? matches.map(x => join(opts.cwd, x)) : matches;
 };
