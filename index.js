@@ -54,7 +54,6 @@ module.exports = async function (str, opts={}) {
   if (!str) return [];
 
   let glob = globalyzer(str);
-
   opts.cwd = resolve(opts.cwd || '.');
 
   if (!glob.isGlob) {
@@ -69,9 +68,8 @@ module.exports = async function (str, opts={}) {
     }
   }
 
-  if (opts.flush) CACHE = {};
-
   let matches = [];
+  if (opts.flush) CACHE = {};
   const { path } = globrex(glob.glob, { filepath:true, globstar:true, extended:true });
 
   path.globstar = path.globstar.toString();
