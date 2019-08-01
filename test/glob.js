@@ -189,7 +189,6 @@ test('glob: options.filesOnly', async t => {
   t.plan(2);
 
   await isMatch(t, 'test/fixtures/*', { filesOnly:true }, [
-    //'test/fixtures/.a-hidden.txt',
     'test/fixtures/a.js',
     'test/fixtures/a.mp3',
     'test/fixtures/a.txt',
@@ -203,6 +202,7 @@ test('glob: options.filesOnly', async t => {
     'test/fixtures/a.txt',
     'test/fixtures/b.js',
     'test/fixtures/b.txt',
+    'test/fixtures/deep',
     'test/fixtures/ond',
     'test/fixtures/one',
     'test/fixtures/two'
