@@ -1,13 +1,15 @@
-type Options = {
-  cwd?: string;
-  dot?: boolean;
-  absolute?: boolean;
-  filesOnly?: boolean;
-  flush?: boolean;
-};
+declare namespace glob {
+  interface Options {
+    cwd?: string;
+    dot?: boolean;
+    absolute?: boolean;
+    filesOnly?: boolean;
+    flush?: boolean;
+  }
+  
+  type FilePath = string;
+}
 
-type FilePath = string;
-
-declare function glob(str: string, opts?: Options): Promise<FilePath[]>;
+declare function glob(str: string, opts?: glob.Options): Promise<glob.FilePath[]>;
 
 export = glob;
