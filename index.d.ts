@@ -1,13 +1,15 @@
-type Options = {
+export interface Options = {
   cwd?: string;
   dot?: boolean;
   absolute?: boolean;
   filesOnly?: boolean;
   flush?: boolean;
-};
+}
 
-type FilePath = string;
+export type FilePath = string;
 
-declare function glob(str: string, opts?: Options): Promise<FilePath[]>;
+export function glob(str: string, opts?: Options): FilePath[];
 
-export = glob;
+declare module "sync" {
+  export function glob(str: string, opts?: Options): FilePath[];
+}
