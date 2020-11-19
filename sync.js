@@ -59,7 +59,7 @@ module.exports = function (str, opts={}) {
     try {
       let resolved = resolve(opts.cwd, str);
       let dirent = fs.statSync(resolved);
-      if (opts.filesOnly && !dirent.isFile()) return []
+      if (opts.filesOnly && !dirent.isFile()) return [];
 
       return opts.absolute ? [resolved] : [str];
     } catch (err) {
