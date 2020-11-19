@@ -40,6 +40,7 @@ test('glob: glob', async t => {
     'test/fixtures/a.txt',
     'test/fixtures/b.js',
     'test/fixtures/b.txt',
+    'test/fixtures/deep',
     'test/fixtures/ond',
     'test/fixtures/one',
     'test/fixtures/two'
@@ -203,6 +204,7 @@ test('glob: options.filesOnly', async t => {
     'test/fixtures/a.txt',
     'test/fixtures/b.js',
     'test/fixtures/b.txt',
+    'test/fixtures/deep',
     'test/fixtures/ond',
     'test/fixtures/one',
     'test/fixtures/two'
