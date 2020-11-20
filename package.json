@@ -27,7 +27,7 @@
   "repository": "https://github.com/terkelg/tiny-glob",
   "license": "MIT",
   "dependencies": {
-    "globalyzer": "^0.1.0",
+    "globalyzer": "0.1.0",
     "globrex": "^0.1.1"
   },
   "devDependencies": {
