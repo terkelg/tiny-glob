@@ -44,7 +44,7 @@
   },
   "modes": {
     "sync": "src/sync.js",
-    "default": "src/index.js"
+    "default": "src/async.js"
   },
   "keywords": [
     "glob",

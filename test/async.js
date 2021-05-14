@@ -3,7 +3,7 @@ import * as assert from 'uvu/assert';
 import { join, resolve } from 'path';
 
 import { order, unixify } from './helpers';
-import glob from '../src';
+import glob from '../src/async';
 
 const cwd = join(__dirname, 'fixtures');
 
@@ -27,8 +27,8 @@ test('glob: glob', async () => {
 
   // Ideal: test/fixtures/../fixture etc
   await isMatch('test/fixtures/../*', {}, [
+    'test/async.js',
     'test/fixtures',
-    'test/glob.js',
     'test/helpers'
   ]);
 
@@ -45,11 +45,11 @@ test('glob: glob', async () => {
   ]);
 
   await isMatch('test/*.{js,txt}', {}, [
-    'test/glob.js'
+    'test/async.js'
   ]);
 
   await isMatch('./test/*.{js,txt}', {}, [
-    'test/glob.js'
+    'test/async.js'
   ]);
 
   // Ideal: ../[parent]/test/fixtures/a.mp3
