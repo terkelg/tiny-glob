@@ -39,7 +39,8 @@
     "globrex": "^0.1.2"
   },
   "devDependencies": {
-    "bundt": "1.1.2"
+    "bundt": "1.1.2",
+    "uvu": "0.5.1"
   },
   "modes": {
     "sync": "src/sync.js",
