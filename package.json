@@ -17,6 +17,17 @@
     "dist",
     "sync"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./sync": {
+      "import": "./sync/index.mjs",
+      "require": "./sync/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "build": "bundt",
     "bench": "node bench",
