@@ -1,40 +1,38 @@
-const test = require('tape');
-const { join, resolve } = require('path');
-const { order, unixify } = require('./helpers');
-const glob = require('../dist');
+import { test } from 'uvu';
+import * as assert from 'uvu/assert';
+import { join, resolve } from 'path';
+
+import { order, unixify } from './helpers';
+import glob from '../src';
 
 const cwd = join(__dirname, 'fixtures');
 
-function isMatch(t, str, opts, arr) {
+async function isMatch(str, opts, arr) {
   arr = arr.map(unixify);
-  return glob(str, opts).then(order).then(val => {
-    t.same(val, arr);
-  });
+  let val = await glob(str, opts).then(order);
+  assert.equal(val, arr);
 }
 
-test('glob: standard', async t => {
-  t.plan(2);
-  t.is(typeof glob, 'function', 'consturctor is a typeof function');
-  t.true(Array.isArray(await glob('')), 'returns array');
+test('glob: standard', async () => {
+  assert.type(glob, 'function', 'consturctor is a typeof function');
+  assert.instance(await glob(''), Array, 'returns array');
 });
 
-test('glob: glob', async t => {
-  t.plan(14);
+test('glob: glob', async () => {
+  assert.equal(await glob(''), []);
+  assert.equal(await glob('.'), ['.']);
+  assert.equal(await glob('./'), ['./']);
 
-  t.same(await glob(''), []);
-  t.same(await glob('.'), ['.']);
-  t.same(await glob('./'), ['./']);
-
-  await isMatch(t, 'test/fixtures', {}, ['test/fixtures']);
+  await isMatch('test/fixtures', {}, ['test/fixtures']);
 
   // Ideal: test/fixtures/../fixture etc
-  await isMatch(t, 'test/fixtures/../*', {}, [
+  await isMatch('test/fixtures/../*', {}, [
     'test/fixtures',
     'test/glob.js',
     'test/helpers'
   ]);
 
-  await isMatch(t, 'test/fixtures/*', {}, [
+  await isMatch('test/fixtures/*', {}, [
     'test/fixtures/a.js',
     'test/fixtures/a.mp3',
     'test/fixtures/a.txt',
@@ -46,32 +44,32 @@ test('glob: glob', async t => {
     'test/fixtures/two'
   ]);
 
-  await isMatch(t, 'test/*.{js,txt}', {}, [
+  await isMatch('test/*.{js,txt}', {}, [
     'test/glob.js'
   ]);
 
-  await isMatch(t, './test/*.{js,txt}', {}, [
+  await isMatch('./test/*.{js,txt}', {}, [
     'test/glob.js'
   ]);
 
   // Ideal: ../[parent]/test/fixtures/a.mp3
-  await isMatch(t, '../tiny-glob/**/*.{mp3}', {}, ['test/fixtures/a.mp3']);
+  await isMatch('../tiny-glob/**/*.{mp3}', {}, ['test/fixtures/a.mp3']);
 
-  await isMatch(t, 'test/fixtures/**/*.{mp3}', {}, ['test/fixtures/a.mp3']);
-  await isMatch(t, 'tes[tp]/fixtures/**/*.{mp3}', {}, ['test/fixtures/a.mp3']);
-  await isMatch(t, 'test/fixtures/**/a.js', {}, [
+  await isMatch('test/fixtures/**/*.{mp3}', {}, ['test/fixtures/a.mp3']);
+  await isMatch('tes[tp]/fixtures/**/*.{mp3}', {}, ['test/fixtures/a.mp3']);
+  await isMatch('test/fixtures/**/a.js', {}, [
     'test/fixtures/a.js',
     'test/fixtures/one/a.js',
     'test/fixtures/one/child/a.js'
   ]);
 
-  await isMatch(t, 'test/fixtures/**/b.{js,txt}', {}, [
+  await isMatch('test/fixtures/**/b.{js,txt}', {}, [
     'test/fixtures/b.js',
     'test/fixtures/b.txt',
     'test/fixtures/one/b.txt'
   ]);
 
-  await isMatch(t, '**/*.{txt,js}', { cwd }, [
+  await isMatch('**/*.{txt,js}', { cwd }, [
     'a.js',
     'a.txt',
     'b.js',
@@ -86,18 +84,14 @@ test('glob: glob', async t => {
   ]);
 });
 
-test("glob: path dosen't exist (without glob)", async t => {
-  t.plan(1);
-
-  await isMatch(t, 'z.js', { cwd }, [ ]);
+test("glob: path dosen't exist (without glob)", async () => {
+  await isMatch('z.js', { cwd }, [ ]);
 });
 
-test('glob: options.cwd', async t => {
-  t.plan(2);
-
+test('glob: options.cwd', async () => {
   let dir = join(cwd, 'one', 'child');
 
-  await isMatch(t, '../*', { cwd:dir }, [
+  await isMatch('../*', { cwd:dir }, [
     '../a.js',
     '../a.md',
     '../a.txt',
@@ -106,28 +100,24 @@ test('glob: options.cwd', async t => {
   ]);
 
   // Ideal: ../child/a.js etc
-  await isMatch(t, '../child/*', { cwd:dir }, [
+  await isMatch('../child/*', { cwd:dir }, [
     'a.js',
     'a.md',
     'a.txt'
   ]);
 });
 
-test('glob: options.cwd (without glob)', async t => {
-  t.plan(1);
-
+test('glob: options.cwd (without glob)', async () => {
   let dir = join(cwd, 'one', 'child');
 
-  await isMatch(t, '../child/a.js', { cwd:dir }, [ '../child/a.js' ]);
+  await isMatch('../child/a.js', { cwd:dir }, [ '../child/a.js' ]);
 });
 
-test('glob: options.cwd (absolute)', async t => {
-  t.plan(2);
-
+test('glob: options.cwd (absolute)', async () => {
   let dir = resolve(cwd, 'one', 'child');
   let opts = { cwd:dir, absolute:true };
 
-  await isMatch(t, '../*', opts, [
+  await isMatch('../*', opts, [
     resolve(dir, '../a.js'),
     resolve(dir, '../a.md'),
     resolve(dir, '../a.txt'),
@@ -136,38 +126,34 @@ test('glob: options.cwd (absolute)', async t => {
   ]);
 
   // Ideal: ../child/a.js etc
-  await isMatch(t, '../child/*', opts, [
+  await isMatch('../child/*', opts, [
     resolve(dir, 'a.js'),
     resolve(dir, 'a.md'),
     resolve(dir, 'a.txt')
   ]);
 });
 
-test('glob: options.dot', async t => {
-  t.plan(2);
-
-  await isMatch(t, 'test/fixtures/*.txt', { dot:true }, [
+test('glob: options.dot', async () => {
+  await isMatch('test/fixtures/*.txt', { dot:true }, [
     'test/fixtures/.a-hidden.txt',
     'test/fixtures/a.txt',
     'test/fixtures/b.txt'
   ]);
 
-  await isMatch(t, 'test/fixtures/*.txt', { dot:false }, [
+  await isMatch('test/fixtures/*.txt', { dot:false }, [
     'test/fixtures/a.txt',
     'test/fixtures/b.txt'
   ]);
 });
 
-test('glob: options.absolute', async t => {
-  t.plan(2);
-
-  await isMatch(t, 'test/fixtures/*.txt', { absolute:true }, [
+test('glob: options.absolute', async () => {
+  await isMatch('test/fixtures/*.txt', { absolute:true }, [
     resolve('test/fixtures/a.txt'),
     resolve('test/fixtures/b.txt')
   ]);
 
   let dir = join(cwd, 'one', 'child');
-  await isMatch(t, '../*', { cwd:dir, absolute:true }, [
+  await isMatch('../*', { cwd:dir, absolute:true }, [
     resolve(dir, '../a.js'),
     resolve(dir, '../a.md'),
     resolve(dir, '../a.txt'),
@@ -176,20 +162,16 @@ test('glob: options.absolute', async t => {
   ]);
 });
 
-test('glob: options.absolute (without glob)', async t => {
-  t.plan(1);
-
+test('glob: options.absolute (without glob)', async () => {
   let dir = join(cwd, 'one', 'child');
 
-  await isMatch(t, '../child/a.js', { cwd:dir, absolute:true }, [
+  await isMatch('../child/a.js', { cwd:dir, absolute:true }, [
     resolve(dir, '../child/a.js')
   ]);
 });
 
-test('glob: options.filesOnly', async t => {
-  t.plan(2);
-
-  await isMatch(t, 'test/fixtures/*', { filesOnly:true }, [
+test('glob: options.filesOnly', async () => {
+  await isMatch('test/fixtures/*', { filesOnly:true }, [
     //'test/fixtures/.a-hidden.txt',
     'test/fixtures/a.js',
     'test/fixtures/a.mp3',
@@ -198,7 +180,7 @@ test('glob: options.filesOnly', async t => {
     'test/fixtures/b.txt'
   ]);
 
-  await isMatch(t, 'test/fixtures/*', { filesOnly:false }, [
+  await isMatch('test/fixtures/*', { filesOnly:false }, [
     'test/fixtures/a.js',
     'test/fixtures/a.mp3',
     'test/fixtures/a.txt',
@@ -211,20 +193,17 @@ test('glob: options.filesOnly', async t => {
   ]);
 });
 
-test('glob: options.filesOnly (without glob)', async t => {
-  t.plan(2);
-
-  await isMatch(t, 'test/fixtures/one', { filesOnly:true }, []);
-
-  await isMatch(t, 'test/fixtures/one', { filesOnly:false }, [
+test('glob: options.filesOnly (without glob)', async () => {
+  await isMatch('test/fixtures/one', { filesOnly:true }, []);
+  await isMatch('test/fixtures/one', { filesOnly:false }, [
     'test/fixtures/one',
   ]);
 });
 
-test('glob: deep match with higher level siblings', async t => {
-  t.plan(1);
-
-  await isMatch(t, 'test/fixtures/deep/*/c/d', {}, [
+test('glob: deep match with higher level siblings', async () => {
+  await isMatch('test/fixtures/deep/*/c/d', {}, [
     'test/fixtures/deep/b/c/d'
   ]);
 });
+
+test.run();

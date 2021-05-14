@@ -31,8 +31,7 @@
   "scripts": {
     "build": "bundt",
     "bench": "node bench",
-    "pretest": "npm run build",
-    "test": "tape test/*.js | tap-spec"
+    "test": "uvu test -r esm -i fixtures -i helpers"
   },
   "dependencies": {
     "globalyzer": "0.1.0",
@@ -40,6 +39,7 @@
   },
   "devDependencies": {
     "bundt": "1.1.2",
+    "esm": "3.2.25",
     "uvu": "0.5.1"
   },
   "modes": {
