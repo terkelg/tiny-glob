@@ -3,6 +3,8 @@
   "version": "0.2.8",
   "description": "Tiny and extremely fast globbing",
   "repository": "terkelg/tiny-glob",
+  "module": "dist/index.mjs",
+  "main": "dist/index.js",
   "types": "index.d.ts",
   "license": "MIT",
   "author": {
@@ -11,10 +13,12 @@
     "url": "https://terkel.com"
   },
   "files": [
-    "*.js",
-    "*.d.ts"
+    "*.d.ts",
+    "dist",
+    "sync"
   ],
   "scripts": {
+    "build": "bundt",
     "bench": "node bench",
     "test": "tape test/*.js | tap-spec"
   },
@@ -23,8 +27,13 @@
     "globrex": "^0.1.2"
   },
   "devDependencies": {
+    "bundt": "1.1.2",
     "tap-spec": "^5.0.0",
     "tape": "^5.0.1"
+  },
+  "modes": {
+    "sync": "src/sync.js",
+    "default": "src/index.js"
   },
   "keywords": [
     "glob",

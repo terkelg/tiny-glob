@@ -1,8 +1,9 @@
-const fs = require('fs');
-const globrex = require('globrex');
-const { promisify } = require('util');
-const globalyzer = require('globalyzer');
-const { join, resolve, relative } = require('path');
+import * as fs from 'fs';
+import globrex from 'globrex';
+import { promisify } from 'util';
+import globalyzer from 'globalyzer';
+import { join, resolve, relative } from 'path';
+
 const isHidden = /(^|[\\\/])\.[^\\\/\.]/g;
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat);
@@ -50,7 +51,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @param {Boolean} [options.flush=false] Reset cache object
  * @returns {Array} array containing matching files
  */
-module.exports = async function (str, opts={}) {
+export default async function (str, opts={}) {
   if (!str) return [];
 
   let glob = globalyzer(str);
@@ -80,4 +81,4 @@ module.exports = async function (str, opts={}) {
   await walk(matches, glob.base, path, opts, '.', 0);
 
   return opts.absolute ? matches.map(x => resolve(opts.cwd, x)) : matches;
-};
+}

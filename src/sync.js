@@ -1,7 +1,8 @@
-const fs = require('fs');
-const globrex = require('globrex');
-const globalyzer = require('globalyzer');
-const { join, resolve, relative } = require('path');
+import * as fs from 'fs';
+import globrex from 'globrex';
+import globalyzer from 'globalyzer';
+import { join, resolve, relative } from 'path';
+
 const isHidden = /(^|[\\\/])\.[^\\\/\.]/g;
 
 let CACHE = {};
@@ -48,7 +49,7 @@ function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @param {Boolean} [options.flush=false] Reset cache object
  * @returns {Array} array containing matching files
  */
-module.exports = function (str, opts={}) {
+export default function (str, opts={}) {
   if (!str) return [];
 
   let glob = globalyzer(str);
@@ -78,4 +79,4 @@ module.exports = function (str, opts={}) {
   walk(matches, glob.base, path, opts, '.', 0);
 
   return opts.absolute ? matches.map(x => resolve(opts.cwd, x)) : matches;
-};
+}
