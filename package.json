@@ -39,9 +39,7 @@
     "globrex": "^0.1.2"
   },
   "devDependencies": {
-    "bundt": "1.1.2",
-    "tap-spec": "^5.0.0",
-    "tape": "^5.0.1"
+    "bundt": "1.1.2"
   },
   "modes": {
     "sync": "src/sync.js",
