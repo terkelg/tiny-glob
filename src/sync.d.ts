@@ -8,6 +8,4 @@ type Options = {
 
 type FilePath = string;
 
-declare function glob(str: string, opts?: Options): FilePath[];
-
-export = glob;
+export function glob(str: string, opts?: Options): FilePath[];
