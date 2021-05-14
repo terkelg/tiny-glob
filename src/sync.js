@@ -49,7 +49,7 @@ function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @param {Boolean} [options.flush=false] Reset cache object
  * @returns {Array} array containing matching files
  */
-export default function (str, opts={}) {
+export function glob(str, opts={}) {
   if (!str) return [];
 
   let glob = globalyzer(str);

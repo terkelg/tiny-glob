@@ -8,6 +8,4 @@ type Options = {
 
 type FilePath = string;
 
-declare function glob(str: string, opts?: Options): Promise<FilePath[]>;
-
-export = glob;
+export function glob(str: string, opts?: Options): Promise<FilePath[]>;

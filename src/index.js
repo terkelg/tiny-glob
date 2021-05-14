@@ -51,7 +51,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @param {Boolean} [options.flush=false] Reset cache object
  * @returns {Array} array containing matching files
  */
-export default async function (str, opts={}) {
+export async function glob(str, opts={}) {
   if (!str) return [];
 
   let glob = globalyzer(str);
