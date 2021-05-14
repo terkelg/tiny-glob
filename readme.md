@@ -8,11 +8,8 @@
   <a href="https://npmjs.org/package/tiny-glob">
     <img src="https://img.shields.io/npm/v/tiny-glob.svg" alt="version" />
   </a>
-  <a href="https://travis-ci.org/terkelg/tiny-glob">
-    <img src="https://img.shields.io/travis/terkelg/tiny-glob.svg" alt="travis" />
-  </a>
-  <a href="https://ci.appveyor.com/project/terkelg/tiny-glob/branch/master">
-    <img src="https://ci.appveyor.com/api/projects/status/qe8sm2c7mwm0hxud/branch/master?svg=true" alt="AppVeyor"/>
+  <a href="https://github.com/terkelg/tiny-glob/actions">
+    <img src="https://github.com/terkelg/tiny-glob/actions/workflows/ci.yml/badge.svg" alt="CI" />
   </a>
   <a href="https://npmjs.org/package/tiny-glob">
     <img src="https://img.shields.io/npm/dm/tiny-glob.svg" alt="downloads" />
