@@ -28,6 +28,9 @@
     },
     "./package.json": "./package.json"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "scripts": {
     "build": "bundt",
     "bench": "node bench",
