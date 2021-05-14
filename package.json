@@ -1,6 +1,6 @@
 {
   "name": "tiny-glob",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Tiny and extremely fast globbing",
   "repository": "terkelg/tiny-glob",
   "types": "index.d.ts",
