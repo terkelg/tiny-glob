@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+
+  pull_request:
+    branches:
+      - 'master'
+
+jobs:
+  test:
+    name: Node.js v${{ matrix.nodejs }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        nodejs: [8, 10, 12, 14]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.nodejs }}
+
+    - name: (env) cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-${{ matrix.nodejs }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-${{ matrix.nodejs }}-
+
+    - name: Install
+      run: npm ci
+
+    - name: Run Tests
+      run: npm test
