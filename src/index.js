@@ -1,15 +1,18 @@
-const fs = require('fs');
-const globrex = require('globrex');
-const globalyzer = require('globalyzer');
-const { join, resolve, relative } = require('path');
-const isHidden = /(^|[\\\/])\.[^\\\/\.]/g;
+import * as fs from 'fs';
+import globrex from 'globrex';
+import { promisify } from 'util';
+import globalyzer from 'globalyzer';
+import { join, resolve, relative } from 'path';
 
+const isHidden = /(^|[\\\/])\.[^\\\/\.]/g;
+const readdir = promisify(fs.readdir);
+const stat = promisify(fs.stat);
 let CACHE = {};
 
-function walk(output, prefix, lexer, opts, dirname='', level=0) {
+async function walk(output, prefix, lexer, opts, dirname='', level=0) {
   const rgx = lexer.segments[level];
   const dir = resolve(opts.cwd, prefix, dirname);
-  const files = fs.readdirSync(dir);
+  const files = await readdir(dir);
   const { dot, filesOnly } = opts;
 
   let i=0, len=files.length, file;
@@ -33,7 +36,7 @@ function walk(output, prefix, lexer, opts, dirname='', level=0) {
     if (rgx && !rgx.test(file)) continue;
     !filesOnly && isMatch && output.push(join(prefix, relpath));
 
-    walk(output, prefix, lexer, opts, relpath, rgx && rgx.toString() !== lexer.globstar && level + 1);
+    await walk(output, prefix, lexer, opts, relpath, rgx && rgx.toString() !== lexer.globstar && level + 1);
   }
 }
 
@@ -48,7 +51,7 @@ function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @param {Boolean} [options.flush=false] Reset cache object
  * @returns {Array} array containing matching files
  */
-module.exports = function (str, opts={}) {
+export default async function (str, opts={}) {
   if (!str) return [];
 
   let glob = globalyzer(str);
@@ -58,7 +61,7 @@ module.exports = function (str, opts={}) {
   if (!glob.isGlob) {
     try {
       let resolved = resolve(opts.cwd, str);
-      let dirent = fs.statSync(resolved);
+      let dirent = await stat(resolved);
       if (opts.filesOnly && !dirent.isFile()) return [];
 
       return opts.absolute ? [resolved] : [str];
@@ -75,7 +78,7 @@ module.exports = function (str, opts={}) {
   const { path } = globrex(glob.glob, { filepath:true, globstar:true, extended:true });
 
   path.globstar = path.globstar.toString();
-  walk(matches, glob.base, path, opts, '.', 0);
+  await walk(matches, glob.base, path, opts, '.', 0);
 
   return opts.absolute ? matches.map(x => resolve(opts.cwd, x)) : matches;
-};
+}

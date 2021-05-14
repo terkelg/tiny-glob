@@ -1,17 +1,16 @@
-const fs = require('fs');
-const globrex = require('globrex');
-const { promisify } = require('util');
-const globalyzer = require('globalyzer');
-const { join, resolve, relative } = require('path');
+import * as fs from 'fs';
+import globrex from 'globrex';
+import globalyzer from 'globalyzer';
+import { join, resolve, relative } from 'path';
+
 const isHidden = /(^|[\\\/])\.[^\\\/\.]/g;
-const readdir = promisify(fs.readdir);
-const stat = promisify(fs.stat);
+
 let CACHE = {};
 
-async function walk(output, prefix, lexer, opts, dirname='', level=0) {
+function walk(output, prefix, lexer, opts, dirname='', level=0) {
   const rgx = lexer.segments[level];
   const dir = resolve(opts.cwd, prefix, dirname);
-  const files = await readdir(dir);
+  const files = fs.readdirSync(dir);
   const { dot, filesOnly } = opts;
 
   let i=0, len=files.length, file;
@@ -35,7 +34,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
     if (rgx && !rgx.test(file)) continue;
     !filesOnly && isMatch && output.push(join(prefix, relpath));
 
-    await walk(output, prefix, lexer, opts, relpath, rgx && rgx.toString() !== lexer.globstar && level + 1);
+    walk(output, prefix, lexer, opts, relpath, rgx && rgx.toString() !== lexer.globstar && level + 1);
   }
 }
 
@@ -50,7 +49,7 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @param {Boolean} [options.flush=false] Reset cache object
  * @returns {Array} array containing matching files
  */
-module.exports = async function (str, opts={}) {
+export default function (str, opts={}) {
   if (!str) return [];
 
   let glob = globalyzer(str);
@@ -60,7 +59,7 @@ module.exports = async function (str, opts={}) {
   if (!glob.isGlob) {
     try {
       let resolved = resolve(opts.cwd, str);
-      let dirent = await stat(resolved);
+      let dirent = fs.statSync(resolved);
       if (opts.filesOnly && !dirent.isFile()) return [];
 
       return opts.absolute ? [resolved] : [str];
@@ -77,7 +76,7 @@ module.exports = async function (str, opts={}) {
   const { path } = globrex(glob.glob, { filepath:true, globstar:true, extended:true });
 
   path.globstar = path.globstar.toString();
-  await walk(matches, glob.base, path, opts, '.', 0);
+  walk(matches, glob.base, path, opts, '.', 0);
 
   return opts.absolute ? matches.map(x => resolve(opts.cwd, x)) : matches;
-};
+}
