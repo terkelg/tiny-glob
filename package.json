@@ -2,6 +2,14 @@
   "name": "tiny-glob",
   "version": "0.2.8",
   "description": "Tiny and extremely fast globbing",
+  "repository": "terkelg/tiny-glob",
+  "types": "index.d.ts",
+  "license": "MIT",
+  "author": {
+    "name": "Terkel Gjervig",
+    "email": "terkel@terkel.com",
+    "url": "https://terkel.com"
+  },
   "files": [
     "*.js",
     "*.d.ts"
@@ -10,21 +18,6 @@
     "bench": "node bench",
     "test": "tape test/*.js | tap-spec"
   },
-  "author": {
-    "name": "Terkel Gjervig",
-    "email": "terkel@terkel.com",
-    "url": "https://terkel.com"
-  },
-  "keywords": [
-    "glob",
-    "globbing",
-    "patterns",
-    "wildcard",
-    "pattern-matching",
-    "expansion"
-  ],
-  "repository": "https://github.com/terkelg/tiny-glob",
-  "license": "MIT",
   "dependencies": {
     "globalyzer": "0.1.0",
     "globrex": "^0.1.2"
@@ -33,5 +26,12 @@
     "tap-spec": "^5.0.0",
     "tape": "^5.0.1"
   },
-  "types": "./index.d.ts"
+  "keywords": [
+    "glob",
+    "globbing",
+    "patterns",
+    "wildcard",
+    "pattern-matching",
+    "expansion"
+  ]
 }
