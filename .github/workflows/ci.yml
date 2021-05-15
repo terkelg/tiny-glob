@@ -34,5 +34,21 @@ jobs:
     - name: Install
       run: npm ci
 
-    - name: Run Tests
+    - name: (coverage) Install
+      if: matrix.nodejs >= 14
+      run: npm install -g c8
+
+    - name: Test
+      if: matrix.nodejs < 14
       run: npm test
+
+    - name: (coverage) Test
+      if: matrix.nodejs >= 14
+      run: c8 npm test
+
+    - name: (coverage) Report
+      if: matrix.nodejs >= 14
+      run: c8 report --reporter=text-lcov > coverage.lcov
+      # bash <(curl -s https://codecov.io/bash)
+      # env:
+      #   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
