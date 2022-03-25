@@ -228,3 +228,21 @@ test('glob: deep match with higher level siblings', async t => {
     'test/fixtures/deep/b/c/d'
   ]);
 });
+
+test('glob: cache is keyed by absolute path', async (t) => {
+  t.plan(2);
+
+  // "one/child" is a directory.
+  await isMatch(t, 'test/fixtures/one/**/*.txt', {}, [
+    'test/fixtures/one/a.txt',
+    'test/fixtures/one/b.txt',
+    'test/fixtures/one/child/a.txt',
+  ]);
+
+  // "two/child" is a file. If we re-use cached stats from "one/child" here,
+  // then we will mistakenly try to descend into "child" as a directory, even
+  // though it is a file, raising an error.
+  await isMatch(t, 'test/fixtures/two/**/*.txt', {}, [
+    'test/fixtures/two/a.txt',
+  ]);
+});

@@ -23,8 +23,8 @@ async function walk(output, prefix, lexer, opts, dirname='', level=0) {
     if (!dot && isHidden.test(relpath)) continue;
     isMatch = lexer.regex.test(relpath);
 
-    if ((stats=CACHE[relpath]) === void 0) {
-      CACHE[relpath] = stats = fs.lstatSync(fullpath);
+    if ((stats=CACHE[fullpath]) === void 0) {
+      CACHE[fullpath] = stats = fs.lstatSync(fullpath);
     }
 
     if (!stats.isDirectory()) {
