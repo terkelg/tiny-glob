@@ -4,6 +4,7 @@ type Options = {
   absolute?: boolean;
   filesOnly?: boolean;
   flush?: boolean;
+  ignore?: string[];
 };
 
 type FilePath = string;

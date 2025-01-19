@@ -10,7 +10,7 @@ function walk(output, prefix, lexer, opts, dirname='', level=0) {
   const rgx = lexer.segments[level];
   const dir = resolve(opts.cwd, prefix, dirname);
   const files = fs.readdirSync(dir);
-  const { dot, filesOnly } = opts;
+  const { dot, filesOnly, ignore } = opts;
 
   let i=0, len=files.length, file;
   let fullpath, relpath, stats, isMatch;
@@ -19,6 +19,7 @@ function walk(output, prefix, lexer, opts, dirname='', level=0) {
     fullpath = join(dir, file=files[i]);
     relpath = dirname ? join(dirname, file) : file;
     if (!dot && isHidden.test(relpath)) continue;
+    if (ignore && ignore.some(pattern => new RegExp(pattern).test(relpath))) continue;
     isMatch = lexer.regex.test(relpath);
 
     if ((stats=CACHE[relpath]) === void 0) {
@@ -46,6 +47,7 @@ function walk(output, prefix, lexer, opts, dirname='', level=0) {
  * @param {Boolean} [options.absolute=false] Return absolute paths
  * @param {Boolean} [options.filesOnly=false] Do not include folders if true
  * @param {Boolean} [options.flush=false] Reset cache object
+ * @param {Array} [options.ignore=[]] Patterns to ignore
  * @returns {Array} array containing matching files
  */
 module.exports = function (str, opts={}) {
@@ -54,6 +56,7 @@ module.exports = function (str, opts={}) {
   let glob = globalyzer(str);
 
   opts.cwd = opts.cwd || '.';
+  opts.ignore = opts.ignore || [];
 
   if (!glob.isGlob) {
     try {
