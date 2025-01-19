@@ -145,3 +145,11 @@ Learn more about advanced globbing
 ## License
 
 MIT © [Terkel Gjervig](https://terkel.com)
+
+## Cloning the Repository
+
+To clone the repository using the `gh` command, use the following command:
+
+```
+gh repo clone terkelg/tiny-glob
+```
