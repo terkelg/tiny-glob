@@ -108,6 +108,13 @@ Default: `false`
 
 Flush the internal cache object.
 
+#### options.ignore
+
+Type: `Array`<br>
+Default: `[]`
+
+Patterns to ignore.
+
 
 ## Windows
 

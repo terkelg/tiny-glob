@@ -228,3 +228,24 @@ test('glob: deep match with higher level siblings', async t => {
     'test/fixtures/deep/b/c/d'
   ]);
 });
+
+test('glob: options.ignore', async t => {
+  t.plan(2);
+
+  await isMatch(t, 'test/fixtures/**/*.{js,txt}', { ignore: ['**/a.js', '**/a.txt'] }, [
+    'test/fixtures/b.js',
+    'test/fixtures/b.txt',
+    'test/fixtures/one/b.txt',
+    'test/fixtures/one/child/a.js',
+    'test/fixtures/one/child/a.txt',
+    'test/fixtures/two/a.txt'
+  ]);
+
+  await isMatch(t, 'test/fixtures/**/*.{js,txt}', { ignore: ['**/one/**'] }, [
+    'test/fixtures/a.js',
+    'test/fixtures/a.txt',
+    'test/fixtures/b.js',
+    'test/fixtures/b.txt',
+    'test/fixtures/two/a.txt'
+  ]);
+});
