@@ -11,6 +11,9 @@ on:
     branches:
       - 'master'
 
+  # Manually start a Workflow
+  workflow_dispatch:
+
 jobs:
   test:
     name: Node.js v${{ matrix.nodejs }}
