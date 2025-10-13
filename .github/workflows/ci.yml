@@ -22,13 +22,13 @@ jobs:
       matrix:
         nodejs: [8, 10, 12, 14, 16, 18, 20, 22]
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
+    - uses: actions/checkout@v5
+    - uses: actions/setup-node@v5
       with:
         node-version: ${{ matrix.nodejs }}
 
     - name: (env) cache
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: ~/.npm
         key: ${{ runner.os }}-${{ matrix.nodejs }}-${{ hashFiles('**/package-lock.json') }}
