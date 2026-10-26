@@ -1,4 +1,7 @@
 const test = require('tape');
+const fs = require('fs');
+const os = require('os');
+const globSync = require('../sync');
 const { join, resolve } = require('path');
 const { order, unixify } = require('./helpers');
 const glob = require('../');
@@ -227,4 +230,23 @@ test('glob: deep match with higher level siblings', async t => {
   await isMatch(t, 'test/fixtures/deep/*/c/d', {}, [
     'test/fixtures/deep/b/c/d'
   ]);
+});
+
+test('consecutive hidden entries are excluded from every scan', async t => {
+  const cwd = fs.mkdtempSync(join(os.tmpdir(), 'tiny-glob-hidden-'));
+  const names = ['.a', '.b', '.c', 'visible'];
+  names.forEach(name => fs.writeFileSync(join(cwd, name), ''));
+
+  try {
+    for (let i = 0; i < 2; i++) {
+      t.same(await glob('*', { cwd, flush: true }), ['visible']);
+      t.same(globSync('*', { cwd, flush: true }), ['visible']);
+    }
+    t.same((await glob('*', { cwd, dot: true })).sort(), names);
+    t.same(globSync('*', { cwd, dot: true }).sort(), names);
+  } finally {
+    names.forEach(name => fs.unlinkSync(join(cwd, name)));
+    fs.rmdirSync(cwd);
+  }
+  t.end();
 });
